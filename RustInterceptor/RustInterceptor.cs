@@ -13,25 +13,27 @@ namespace Rust_Interceptor {
 		public bool RememberPackets = false;
 		public bool RememberFilteredOnly = false;
 
-		private bool isAlive;
+		internal bool isAlive;
 		public bool IsAlive {
 			get {
 				return isAlive;
 			}
 		}
-		private static Packet serverPacket;
-		private static Packet clientPacket;
-		static List<Packet> remeberedPackets;
-		static List<Packet.Rust> packetFilter;
+		internal static Packet serverPacket;
+		internal static Packet clientPacket;
+		internal static List<Packet> remeberedPackets;
+		internal static List<Packet.Rust> packetFilter;
 
-		private readonly string serverIP;
-		private readonly int serverPort;
-		private readonly int listenPort;
-		private readonly Queue<Packet> packetQueue;
+		internal string serverIP;
+		internal int serverPort;
+		internal int listenPort;
+		internal Queue<Packet> packetQueue;
 
-		private RakNetPeer clientPeer;
-		private RakNetPeer serverPeer;
-		private readonly Thread backgroundThread;
+		internal RakNetPeer clientPeer;
+		internal RakNetPeer serverPeer;
+		internal readonly Thread backgroundThread;
+
+		internal Action<Packet> packetHandlerCallback = null;
 
 		public RustInterceptor(string server = "127.0.0.1", int port = 28015, int listenPort = 5678) {
 			serverIP = server;
@@ -46,6 +48,10 @@ namespace Rust_Interceptor {
 
 		}
 
+		public void RegisterCallback(Action<Packet> handler) {
+			packetHandlerCallback = handler;
+		}
+
 		public static ulong serverGUID {
 			get { return serverPacket.incomingGUID; }
 		}
@@ -54,11 +60,7 @@ namespace Rust_Interceptor {
 			get { return clientPacket.incomingGUID; }
 		}
 
-		public void AddPacketToFilter(Packet.Rust packetType) {
-			packetFilter.Add(packetType);
-		}
-
-		public void AddPacketsToFilter(params Packet.Rust[] packetTypes) {
+		public void AddPacketToFilter(params Packet.Rust[] packetTypes) {
 			foreach (Packet.Rust type in packetTypes) {
 				packetFilter.Add(type);
 			}
@@ -80,6 +82,10 @@ namespace Rust_Interceptor {
 		public void Stop() {
 			isAlive = false;
 			while (backgroundThread.IsAlive) Thread.Sleep(1);
+		}
+
+		public bool HasPacket() {
+			return packetQueue.Count > 0;
 		}
 
 		public Packet[] LoadPackets(string filename = "packets.json") {
@@ -108,14 +114,14 @@ namespace Rust_Interceptor {
 			SavePackets(remeberedPackets.ToArray(), filename, formatting, informative);
 		}
 
-		public Packet GetPacket(bool wait = true) {
-			while ((packetQueue.Count < 1) && wait) Thread.Sleep(1);
+		public void GetPacket(out Packet packet) {
+			while (packetQueue.Count < 1) Thread.Sleep(1);
 			lock (packetQueue) {
-				return packetQueue.Dequeue();
+				packet = packetQueue.Dequeue();
 			}
 		}
 
-		private void BackgroundThread() {
+		internal void BackgroundThread() {
 			Thread thread = new Thread(() => Clipboard.SetText(string.Format("connect 127.0.0.1:{0}", listenPort)));
 			thread.SetApartmentState(ApartmentState.STA);
 			thread.Start();
@@ -158,9 +164,12 @@ namespace Rust_Interceptor {
 						}
 						if (!isAlive) break;
 					} else if (ClientPackets && !emptyPacket && IsFiltered(packet)) {
-						lock (packetQueue) {
-							packetQueue.Enqueue(packet);
-						}
+						if (packetHandlerCallback != null) {
+							packetHandlerCallback(packet);
+						} else
+							lock (packetQueue) {
+								packetQueue.Enqueue(packet);
+							}
 					}
 					clientPacket.Send(serverPeer, serverGUID);
 					clientPacket.Clear();
@@ -180,9 +189,12 @@ namespace Rust_Interceptor {
 						emptyPacket = true;
 					}
 					if (IsFiltered(packet) && !emptyPacket) {
-						lock (packetQueue) {
-							packetQueue.Enqueue(packet);
-						}
+						if (packetHandlerCallback != null) {
+							packetHandlerCallback(packet);
+						} else
+							lock (packetQueue) {
+								packetQueue.Enqueue(packet);
+							}
 					}
 					serverPacket.Send(clientPeer, clientGUID);
 					serverPacket.Clear();

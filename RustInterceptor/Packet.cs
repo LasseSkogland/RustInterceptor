@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 namespace Rust_Interceptor {
 	[JsonConverter(typeof(Serializer.PacketConverter))]
 	public class Packet : Network.Read {
+		#region ENUM
 
 		public enum RakNet : byte {
 			CONNECTED_PING,
@@ -174,7 +175,7 @@ namespace Rust_Interceptor {
 			RAKNET = 0,
 			RUST = 140
 		}
-
+		#endregion
 		public MemoryStream baseStream = new MemoryStream();
 		public ulong incomingGUID;
 		public int incomingLength;

@@ -49,12 +49,14 @@ namespace Rust_Interceptor {
 		internal class JsonResolver : DefaultContractResolver {
 			internal static Vector3Converter vector3Converter = new Vector3Converter();
 			internal static PacketConverter packetConverter = new PacketConverter();
+			internal static EntityConverter entityConverter = new EntityConverter();
 
 			public override JsonContract ResolveContract(Type type) {
 				JsonContract contract = base.ResolveContract(type);
 				if (typeof(Packet).IsAssignableFrom(type)) contract.Converter = packetConverter;
 				if (typeof(Vector3).IsAssignableFrom(type)) contract.Converter = vector3Converter;
-				if(typeof(string).IsAssignableFrom(type)) contract.DefaultCreator = () => { return ""; };
+				if (typeof(Data.Entity).IsAssignableFrom(type)) contract.Converter = entityConverter;
+				if (typeof(string).IsAssignableFrom(type)) contract.DefaultCreator = () => { return ""; };
 				return contract;
 			}
 
@@ -76,13 +78,12 @@ namespace Rust_Interceptor {
 						p.Writable = false;
 						p.Readable = false;
 						p.Ignored = true;
-					}
-					else {
+					} else {
 						p.Writable = true;
 						p.Readable = true;
 						p.Ignored = false;
 					}
-					
+
 				});
 				return jsonProps;
 			}
@@ -236,6 +237,37 @@ namespace Rust_Interceptor {
 			}
 		}
 
+		internal class EntityConverter : JsonConverter {
+			public override bool CanConvert(Type objectType) {
+				return typeof(Data.Entity).IsAssignableFrom(objectType);
+			}
+
+			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+				throw new NotImplementedException();
+			}
+
+			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
+				var entity = (Data.Entity)value;
+				Action<string, object> Serialize = (string name, object obj) => {
+					writer.WritePropertyName(name);
+					serializer.Serialize(writer, obj);
+				};
+				writer.WriteStartObject();
+				if (entity.IsPlayer) {
+					Serialize("Player Name", entity.PlayerName);
+					Serialize("User ID", entity.PlayerUserID);
+				}
+				Serialize("UID", entity.UID);
+				Serialize("Group", entity.Group);
+				Serialize("Number", entity.Number);
+				Serialize("Player", entity.IsPlayer);
+				Serialize("Position", entity.Position);
+				Serialize("Rotation", entity.Rotation);
+				//if (entity.IsPlayer) Serialize("Inventory", entity.Inventory);
+				writer.WriteEndObject();
+			}
+		}
+
 		internal class Vector3Converter : JsonConverter {
 			public override bool CanConvert(Type objectType) {
 				return typeof(Vector3).IsAssignableFrom(objectType);
@@ -250,13 +282,14 @@ namespace Rust_Interceptor {
 
 			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
 				var vec = (Vector3)value;
+				Action<string, object> Serialize = (string name, object obj) => {
+					writer.WritePropertyName(name);
+					serializer.Serialize(writer, obj);
+				};
 				writer.WriteStartObject();
-				writer.WritePropertyName("x");
-				serializer.Serialize(writer, vec.x);
-				writer.WritePropertyName("y");
-				serializer.Serialize(writer, vec.y);
-				writer.WritePropertyName("z");
-				serializer.Serialize(writer, vec.z);
+				Serialize("x", vec.x);
+				Serialize("y", vec.y);
+				Serialize("z", vec.z);
 				writer.WriteEndObject();
 			}
 		}
