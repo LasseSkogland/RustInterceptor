@@ -8,7 +8,6 @@ namespace Rust_Interceptor.Data {
 	class Approved {
 
 		internal ProtoBuf.Approval protobuf;
-		public ProtoBuf.Approval Protobuf { get { return protobuf; } }
 		public string Checksum { get { return protobuf.checksum; } }
 		public string Hostname { get{ return protobuf.hostname; } }
 		public uint IpAdress { get { return protobuf.ipaddress; } }

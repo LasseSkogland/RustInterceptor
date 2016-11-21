@@ -8,7 +8,6 @@ namespace Rust_Interceptor.Data {
 	class Tick {
 
 		internal PlayerTick protobuf;
-		public PlayerTick Protobuf { get { return protobuf; } }
 		public uint ActiveItem { get { return protobuf.activeItem; } }
 		public UnityEngine.Vector3 EyePosition { get { return protobuf.eyePos;  } }
 		public UnityEngine.Vector3 Position { get { return protobuf.position; } }

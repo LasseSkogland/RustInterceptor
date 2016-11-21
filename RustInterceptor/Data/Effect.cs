@@ -8,7 +8,6 @@ namespace Rust_Interceptor.Data {
 	class Effect {
 
 		internal EffectData protobuf;
-		public EffectData Protobuf { get { return protobuf; } }
 		public uint Bone { get { return protobuf.bone; } }
 		public uint Entity { get { return protobuf.entity; } }
 		public UnityEngine.Vector3 Normal { get { return protobuf.normal; } }
