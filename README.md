@@ -3,8 +3,8 @@
 - **Client - Server "Proxy"**
 - **Packet Serialization**(JSON formatted)
 - **Packet Parsers:**
- - **Entities** (Partial)
- - **EntityPosition**
+ - **Entities** (Partial, this one's big)
+ - **All other handlers are complete**
  
 ### Dependencies:
 - Steam\steamapps\common\Rust\RustClient_Data\Managed\Facepunch.Network.dll
