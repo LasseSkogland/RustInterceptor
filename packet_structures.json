@@ -1,0 +1,575 @@
+[  
+  {  
+    "Name": "Welcome(1)",
+  },
+  {  
+    "Name": "Auth(2)",
+    "Content": {  
+      "AuthData": "BYTES"
+    }
+  },
+  {  
+    "Name": "Approved(3)",
+    "Content": {  
+      "ProtoBuf": {  
+        "level": "",
+        "hostname": "",
+        "modded": false,
+        "official": false,
+        "steamid": 0,
+        "ipaddress": 0,
+        "port": 0,
+        "levelSeed": 0,
+        "levelSize": 0,
+        "checksum": ""
+      }
+    }
+  },
+  {  
+    "Name": "Ready(4)",
+    "Content": {  
+      "ProtoBuf": {  
+        "clientInfo": [  
+          {  
+            "name": "",
+            "value": ""
+          }
+        ]
+      }
+    }
+  },
+  {  
+    "Name": "Entities(5)",
+    "Content": {  
+      "Num": 0,
+      "ProtoBuf": {  
+        "baseNetworkable": {  
+          "uid": 0,
+          "group": 0,
+          "prefabID": 0
+        },
+        "baseEntity": {  
+          "pos": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rot": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "flags": 0,
+          "skinid": 0
+        },
+        "basePlayer": {  
+          "name": "",
+          "userid": 0,
+          "inventory": {  
+            "invMain": {  
+              "UID": 0,
+              "slots": 0,
+              "temperature": 0,
+              "flags": 0,
+              "allowedContents": 0,
+              "maxStackSize": 0,
+              "allowedItem": 0,
+              "availableSlots": [0],
+              "contents": "NOTE: Same as worldItem.contents"
+            },
+            "invBelt": {  
+              "UID": 0,
+              "slots": 0,
+              "temperature": 0,
+              "flags": 0,
+              "allowedContents": 0,
+              "maxStackSize": 0,
+              "allowedItem": 0,
+              "availableSlots": [0],
+              "contents": "NOTE: Same as worldItem.contents"
+            },
+            "invWear": {  
+              "UID": 0,
+              "slots": 0,
+              "temperature": 0,
+              "flags": 0,
+              "allowedContents": 0,
+              "maxStackSize": 0,
+              "allowedItem": 0,
+              "availableSlots": [0],
+              "contents": "NOTE: Same as worldItem.contents"
+            }
+          },
+          "metabolism": {  
+            "health": 0,
+            "calories": 0,
+            "hydration": 0,
+            "heartrate": 0,
+            "temperature": 0,
+            "poison": 0,
+            "radiation_level": 0,
+            "wetness": 0,
+            "dirtyness": 0,
+            "oxygen": 0,
+            "bleeding": 0,
+            "radiation_poisoning": 0,
+            "comfort": 0,
+            "pending_health": 0
+          },
+          "modelState": {  
+            "ducked": false,
+            "jumped": false,
+            "onground": false,
+            "sleeping": false,
+            "sprinting": false,
+            "onLadder": false,
+            "flying": false,
+            "waterLevel": 0,
+            "aiming": 0,
+            "lookDir": {  
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "flags": 0
+          },
+          "playerFlags": 0,
+          "heldEntity": 0,
+          "health": 0,
+          "persistantData": {  
+            "unlockedItems": [0],
+            "protocolVersion": 0
+          },
+          "skinCol": 0,
+          "skinTex": 0,
+          "skinMesh": 0,
+          "currentLife": {  
+            "secondsAlive": 0,
+            "metersWalked": 0,
+            "metersRun": 0,
+            "secondsSleeping": 0,
+            "timeBorn": 0,
+            "timeDied": 0,
+            "deathInfo": {  
+              "attackerName": "",
+              "attackerSteamID": 0,
+              "hitBone": "",
+              "inflictorName": "",
+              "lastDamageType": 0
+            }
+          },
+          "previousLife": {  
+            "secondsAlive": 0,
+            "metersWalked": 0,
+            "metersRun": 0,
+            "secondsSleeping": 0,
+            "timeBorn": 0,
+            "timeDied": 0,
+            "deathInfo": {  
+              "attackerName": "",
+              "attackerSteamID": 0,
+              "hitBone": "",
+              "inflictorName": "",
+              "lastDamageType": 0
+            }
+          }
+        },
+        "worldItem": {  
+          "item": {  
+            "UID": 0,
+            "itemid": 0,
+            "slot": 0,
+            "amount": 0,
+            "flags": 0,
+            "removetime": 0,
+            "locktime": 0,
+            "worldEntity": 0,
+            "instanceData": {  
+              "dataInt": 0,
+              "blueprintTarget": 0,
+              "blueprintAmount": 0
+            },
+            "heldEntity": 0,
+            "conditionData": {  
+              "condition": 0,
+              "maxCondition": 0
+            },
+            "owners": [  
+              {  
+                "fraction": 0,
+                "userid": 0
+              }
+            ],
+            "name": "",
+            "text": "",
+            "skinid": 0,
+            "contents": {  
+              "UID": 0,
+              "slots": 0,
+              "temperature": 0,
+              "flags": 0,
+              "allowedContents": 0,
+              "maxStackSize": 0,
+              "allowedItem": 0,
+              "availableSlots": [0],
+              "contents": "NOTE: Same as worldItem.contents"
+            }
+          }
+        },
+        "resource": {  
+          "stage": 0,
+          "health": 0
+        },
+        "buildingBlock": {  
+          "grade": 0,
+          "beingDemolished": false,
+          "stability": 0,
+          "buildingID": 0
+        },
+        "environment": {  
+          "dateTime": 0,
+          "clouds": 0,
+          "fog": 0,
+          "wind": 0,
+          "rain": 0
+        },
+        "corpse": {  
+          "parentID": 0
+        },
+        "parent": {  
+          "uid": 0,
+          "bone": 0
+        },
+        "keyLock": {  
+          "code": 0
+        },
+        "codeLock": {  
+          "pv": {  
+            "code": "",
+            "users": [  
+              0
+            ]
+          },
+          "hasCode": false
+        },
+        "entitySlots": {  
+          "slotLock": 0,
+          "slotFireMod": 0
+        },
+        "buildingPrivilege": {  
+          "users": [  
+            {  
+              "username": "",
+              "userid": 0
+            }
+          ]
+        },
+        "storageBox": {  
+          "contents": "NOTE: Same as worldItem.contents"
+        },
+        "heldEntity": {  
+          "itemUID": 0
+        },
+        "baseProjectile": {  
+          "primaryMagazine": {  
+            "capacity": 0,
+            "contents": 0,
+            "ammoType": 0
+          }
+        },
+        "baseNPC": {  
+          "state": 0
+        },
+        "loot": {  
+          "contents": "NOTE: Same as worldItem.contents"
+        },
+        "genericSpawner": {  
+          "ents": [  
+            {  
+              "uid": 0,
+              "spawnPointIndex": 0,
+              "mobile": false
+            }
+          ]
+        },
+        "sleepingBag": {  
+          "name": "",
+          "privateData": {  
+            "deployerID": 0,
+            "deployerName": ""
+          },
+          "deployerID": 0
+        },
+        "lootableCorpse": {  
+          "privateData": {  
+            "container": "NOTE: Same as worldItem.contents"
+          },
+          "playerID": 0,
+          "playerName": ""
+        },
+        "sign": {  
+          "imageid": 0
+        },
+        "baseCombat": {  
+          "state": 0,
+          "health": 0
+        },
+        "mapEntity": {  
+          "fogImages": [  
+            0
+          ],
+          "paintImages": [  
+            0
+          ]
+        },
+        "researchTable": {  
+          "researchTimeLeft": 0
+        },
+        "dudExplosive": {  
+          "fuseTimeLeft": 0
+        },
+        "miningQuarry": {  
+          "extractor": {  
+            "fuelContents": "NOTE: Same as worldItem.contents",
+            "outputContents": "NOTE: Same as worldItem.contents"
+          }
+        },
+        "plantEntity": {  
+          "state": 0,
+          "age": 0
+        },
+        "helicopter": {  
+          "tiltRot": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "leftGun": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rightGun": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "spotlightVec": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "weakspothealths": [  
+            0
+          ]
+        },
+        "landmine": {  
+          "triggeredID": 0
+        },
+        "autoturret": {  
+          "aimPos": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "aimDir": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "targetID": 0,
+          "users": [  
+            {  
+              "username": "",
+              "userid": 0
+            }
+          ]
+        },
+        "sphereEntity": {  
+          "radius": 0
+        },
+        "stabilityEntity": {  
+          "stability": 0,
+          "distanceFromGround": 0
+        },
+        "ownerInfo": {  
+          "steamid": 0
+        },
+        "decayEntity": {  
+          "decayTimer": 0
+        },
+        "spawnable": {  
+          "population": 0
+        },
+        "servergib": {  
+          "gibName": ""
+        },
+        "createdThisFrame": true
+      }
+    }
+  },
+  {  
+    "Name": "EntityDestroy(6)",
+    "Content": {  
+      "UID": 0,
+      "Destroy Mode": 0
+    }
+  },
+  {  
+    "Name": "GroupChange(7)",
+    "Content": {  
+      "Entity ID": 0,
+      "Group ID": 0
+    }
+  },
+  {  
+    "Name": "GroupDestroy(8)",
+    "Content": {  
+      "Group ID": 0
+    }
+  },
+  {  
+    "Name": "RPCMessage(9)",
+    "Content": {  
+      "UID": 0,
+      "Name ID": 0,
+      "Source Connection": 0
+    }
+  },
+  {  
+    "Name": "EntityPosition(10)",
+    "Content": {  
+      "Entity Positions": [  
+        {  
+          "Entity ID": 0,
+          "Position": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "Rotation": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ]
+    }
+  },
+  {  
+    "Name": "ConsoleMessage(11)",
+    "Content": {  
+      "Command": ""
+    }
+  },
+  {  
+    "Name": "ConsoleCommand(12)",
+    "Content": {  
+      "Command": ""
+    }
+  },
+  {  
+    "Name": "Effect(13)",
+    "Content": {  
+      "type": 0,
+      "pooledstringid": 0,
+      "number": 0,
+      "origin": {  
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "normal": {  
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 0,
+      "entity": 0,
+      "bone": 0,
+      "source": 0
+    }
+  },
+  {  
+    "Name": "DisconnectReason(14)",
+    "Content": {  
+      "Reason": "closing"
+    }
+  },
+  {  
+    "Name": "Tick(15)",
+    "Content": {  
+      "ProtoBuf": {  
+        "inputState": {  
+          "buttons": 0,
+          "aimAngles": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        "position": {  
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "modelState": {  
+          "ducked": false,
+          "jumped": false,
+          "onground": false,
+          "sleeping": false,
+          "sprinting": false,
+          "onLadder": false,
+          "flying": false,
+          "waterLevel": 0,
+          "aiming": 0,
+          "lookDir": {  
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "flags": 0
+        },
+        "activeItem": 0,
+        "eyePos": {  
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  },
+  {  
+    "Name": "Message(16)",
+    "Content": {  
+      "PlayerName?": "",
+      "PlayerMsg?": ""
+    }
+  },
+  {  
+    "Name": "RequestUserInformation(17)"
+  },
+  {  
+    "Name": "GiveUserInformation(18)",
+    "Content": {  
+      "ProtocolVersion": 0,
+      "Steam ID": 0,
+      "Protocol": 0,
+      "OS Name": "",
+      "Steam Name": "",
+      "Branch": ""
+    }
+  },
+  {  
+    "Name": "GroupEnter(19)",
+    "Content": {  
+      "Group ID": 0
+    }
+  },
+  {  
+    "Name": "GroupLeave(20)",
+    "Content": {  
+      "Group ID": 0
+    }
+  }
+]
