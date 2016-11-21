@@ -20,8 +20,8 @@ namespace Rust_Interceptor.Data {
 		public int Port { get { return protobuf.port; } }
 		public ulong SteamID { get { return protobuf.steamid; } }
 		
-		public Approved(Packet packet) {
-			protobuf = ProtoBuf.Approval.Deserialize(packet);
+		public Approved(Packet p) {
+			protobuf = ProtoBuf.Approval.Deserialize(p);
 		}
 
 	}

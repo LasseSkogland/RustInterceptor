@@ -20,7 +20,7 @@ namespace Rust_Interceptor.Data {
 		public bool Ducked { get { return protobuf.modelState.ducked; } }
 		public int Flags { get { return protobuf.modelState.flags; } }
 		public bool Flying { get { return protobuf.modelState.flying; } }
-		public bool Jumped { get { return protobuf.modelState.jumped} }
+		public bool Jumped { get { return protobuf.modelState.jumped; } }
 		public UnityEngine.Vector3 LookDirection { get { return protobuf.modelState.lookDir; } }
 		public bool OnGround { get{ return protobuf.modelState.onground; } }
 		public bool OnLadder { get{ return protobuf.modelState.onLadder; } }

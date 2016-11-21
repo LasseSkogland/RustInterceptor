@@ -69,7 +69,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Approved.cs" />
+    <Compile Include="Data\Auth.cs" />
+    <Compile Include="Data\ConsoleCommand.cs" />
+    <Compile Include="Data\ConsoleMessage.cs" />
+    <Compile Include="Data\DisconnectReason.cs" />
+    <Compile Include="Data\Effect.cs" />
     <Compile Include="Data\Entity.cs" />
+    <Compile Include="Data\GiveUserInformation.cs" />
+    <Compile Include="Data\GroupDestroy.cs" />
+    <Compile Include="Data\EntityDestroy.cs" />
+    <Compile Include="Data\GroupChange.cs" />
+    <Compile Include="Data\GroupEnter.cs" />
+    <Compile Include="Data\GroupLeave.cs" />
+    <Compile Include="Data\Message.cs" />
+    <Compile Include="Data\Ready.cs" />
+    <Compile Include="Data\RPCMessage.cs" />
+    <Compile Include="Data\Tick.cs" />
     <Compile Include="RustInterceptor.cs" />
     <Compile Include="Internal\RakNetNative.cs" />
     <Compile Include="Packet.cs" />
