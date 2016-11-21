@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Data\Approved.cs" />
     <Compile Include="Data\Auth.cs" />
+    <Compile Include="Data\BasePlayer.cs" />
     <Compile Include="Data\ConsoleCommand.cs" />
     <Compile Include="Data\ConsoleMessage.cs" />
     <Compile Include="Data\DisconnectReason.cs" />
@@ -82,7 +83,10 @@
     <Compile Include="Data\GroupChange.cs" />
     <Compile Include="Data\GroupEnter.cs" />
     <Compile Include="Data\GroupLeave.cs" />
+    <Compile Include="Data\InputMessage.cs" />
     <Compile Include="Data\Message.cs" />
+    <Compile Include="Data\ModelState.cs" />
+    <Compile Include="Data\PlayerMetabolism.cs" />
     <Compile Include="Data\Ready.cs" />
     <Compile Include="Data\RPCMessage.cs" />
     <Compile Include="Data\Tick.cs" />

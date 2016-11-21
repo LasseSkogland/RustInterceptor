@@ -8,9 +8,6 @@ namespace Rust_Interceptor.Data {
 	public class Entity {
 
 		/* BaseNetworkable */
-		/* See packet_structures.json for ProtoBuf layout */
-		internal ProtoBuf.Entity protobuf;
-		public ProtoBuf.Entity Protobuf { get { return protobuf; } }
 		public uint UID { get { return protobuf.baseNetworkable.uid; } }
 		public uint Group { get { return protobuf.baseNetworkable.group; } }
 		public uint PrefabID { get { return protobuf.baseNetworkable.prefabID; } }
@@ -18,58 +15,16 @@ namespace Rust_Interceptor.Data {
 		/* BaseEntity */
 		internal uint num = 0;
 		public uint Number { get { return num; } }
+		internal ProtoBuf.Entity protobuf;
+		public ProtoBuf.Entity Protobuf { get { return protobuf; } }
 		public Vector3 Position { get { return protobuf.baseEntity.pos; } }
 		public Vector3 Rotation { get { return protobuf.baseEntity.rot; } }
 		public int Entity_Flags { get { return protobuf.baseEntity.flags; } }
 		public ulong SkinID { get { return protobuf.baseEntity.skinid; } }
 
-		/* BasePlayer */
-		#region BasePlayer
+		internal BasePlayer player;
+		public BasePlayer Player { get { return player; } }
 		public bool IsPlayer { get { return protobuf.basePlayer != null; } }
-		public string PlayerName { get { return protobuf.basePlayer.name; } }
-		public ulong PlayerUserID { get { return protobuf.basePlayer.userid; } }
-		public int PlayerFlags { get { return protobuf.basePlayer.playerFlags; } }
-		public uint HeldEntity { get { return protobuf.basePlayer.heldEntity; } }
-		public float Health { get { return protobuf.basePlayer.health; } }
-		public float SkinCol { get { return protobuf.basePlayer.skinCol; } }
-		public float SkinTex { get { return protobuf.basePlayer.skinTex; } }
-		public float SkinMesh { get { return protobuf.basePlayer.skinMesh; } }
-		public ProtoBuf.PlayerInventory Inventory { get { return protobuf.basePlayer.inventory; } }
-		#region Metabolism
-		public ProtoBuf.PlayerMetabolism Metabolism { get { return protobuf.basePlayer.metabolism; } }
-		public float Metabolism_Health { get { return protobuf.basePlayer.metabolism.health; } }
-		public float Calories { get { return protobuf.basePlayer.metabolism.calories; } }
-		public float Hydration { get { return protobuf.basePlayer.metabolism.hydration; } }
-		public float Heartrate { get { return protobuf.basePlayer.metabolism.heartrate; } }
-		public float Temperature { get { return protobuf.basePlayer.metabolism.temperature; } }
-		public float Poison { get { return protobuf.basePlayer.metabolism.poison; } }
-		public float RadiationLevel { get { return protobuf.basePlayer.metabolism.radiation_level; } }
-		public float Wetness { get { return protobuf.basePlayer.metabolism.wetness; } }
-		public float Dirtyness { get { return protobuf.basePlayer.metabolism.dirtyness; } }
-		public float Oxygen { get { return protobuf.basePlayer.metabolism.oxygen; } }
-		public float Bleeding { get { return protobuf.basePlayer.metabolism.bleeding; } }
-		public float RadiationPoisoning { get { return protobuf.basePlayer.metabolism.radiation_poisoning; } }
-		public float Comfort { get { return protobuf.basePlayer.metabolism.comfort; } }
-		public float PendingHealth { get { return protobuf.basePlayer.metabolism.pending_health; } }
-		#endregion
-		#region ModelState
-		public ModelState ModelState { get { return protobuf.basePlayer.modelState; } }
-		public float Aiming { get { return protobuf.basePlayer.modelState.aiming; } }
-		public bool Ducked { get { return protobuf.basePlayer.modelState.ducked; } }
-		public int ModelState_Flags { get { return protobuf.basePlayer.modelState.flags; } }
-		public bool Flying { get { return protobuf.basePlayer.modelState.flying; } }
-		public bool Jumped { get { return protobuf.basePlayer.modelState.jumped; } }
-		public Vector3 LookDirection { get { return protobuf.basePlayer.modelState.lookDir; } }
-		public bool OnGround { get { return protobuf.basePlayer.modelState.onground; } }
-		public bool OnLadder { get { return protobuf.basePlayer.modelState.onLadder; } }
-		public bool Sleeping { get { return protobuf.basePlayer.modelState.sleeping; } }
-		public bool Sprinting { get { return protobuf.basePlayer.modelState.sprinting; } }
-		public float WaterLevel { get { return protobuf.basePlayer.modelState.waterLevel; } }
-		#endregion
-		public ProtoBuf.PersistantPlayer PersistantData { get { return protobuf.basePlayer.persistantData; } }
-		public ProtoBuf.PlayerLifeStory CurrentLife { get { return protobuf.basePlayer.currentLife; } }
-		public ProtoBuf.PlayerLifeStory PreviousLife { get { return protobuf.basePlayer.previousLife; } }
-		#endregion
 
 		/* List of all received entities */
 		internal static Dictionary<uint, Entity> entities = new Dictionary<uint, Entity>();
@@ -106,14 +61,15 @@ namespace Rust_Interceptor.Data {
 			if (CheckEntity(id))
 				entities[id].protobuf = proto;
 			else {
-				entities[id] = new Entity(num, proto);
+				entities[id] = new Entity(proto);
+				entities[id].num = num;
 			}
 			return id;
 		}
 
-		public Entity(uint num, ProtoBuf.Entity proto) {
-			this.num = num;
+		public Entity(ProtoBuf.Entity proto) {
 			protobuf = proto;
+			player = new BasePlayer(proto.basePlayer);
 			if (IsPlayer) players.Add(this);
 		}
 	}
