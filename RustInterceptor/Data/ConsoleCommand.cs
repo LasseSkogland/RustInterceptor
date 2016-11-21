@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class ConsoleCommand {
+	public class ConsoleCommand {
 
 		internal string command;
 		public string Command { get { return command; } }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class GiveUserInformation {
+	public class GiveUserInformation {
 		internal byte protocolVersion;
 		public byte ProtocolVersion { get{ return protocolVersion; } }
 		internal ulong steamId;

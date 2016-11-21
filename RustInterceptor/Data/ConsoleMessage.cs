@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class ConsoleMessage {
+	public class ConsoleMessage {
 
 		internal string message;
 		public string Message { get{ return message; } }

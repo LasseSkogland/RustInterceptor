@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class Tick {
+	public class Tick {
 
 		internal PlayerTick protobuf;
 		public uint ActiveItem { get { return protobuf.activeItem; } }

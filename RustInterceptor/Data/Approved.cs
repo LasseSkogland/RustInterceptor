@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class Approved {
+	public class Approved {
 
 		internal ProtoBuf.Approval protobuf;
 		public string Checksum { get { return protobuf.checksum; } }

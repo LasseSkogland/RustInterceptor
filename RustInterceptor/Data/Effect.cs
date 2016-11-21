@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class Effect {
+	public class Effect {
 
 		internal EffectData protobuf;
 		public uint Bone { get { return protobuf.bone; } }

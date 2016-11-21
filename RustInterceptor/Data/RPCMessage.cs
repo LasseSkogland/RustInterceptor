@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class RPCMessage {
+	public class RPCMessage {
 
 		internal uint uid;
 		public uint UID { get { return uid; } }

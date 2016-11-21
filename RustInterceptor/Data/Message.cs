@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class Message {
+	public class Message {
 
-		/* Not tested, could be wrong */
+		/* Not tested and could be wrong, but should parse */
 		internal string playerName;
 		public string PlayerName { get { return playerName; } }
 		internal string playerMessage;

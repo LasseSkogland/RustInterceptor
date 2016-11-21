@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class Auth {
+	public class Auth {
 
 		internal byte[] data;
 		public byte[] Data { get { return data; } }

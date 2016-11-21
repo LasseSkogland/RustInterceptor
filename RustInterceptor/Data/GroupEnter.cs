@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class GroupEnter {
+	public class GroupEnter {
 
 		internal uint groupId;
 		public uint GroupID { get { return groupId; } }

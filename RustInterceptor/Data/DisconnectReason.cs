@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class DisconnectReason {
+	public class DisconnectReason {
 
 		internal string reason;
 		public string Reason { get { return reason; } }

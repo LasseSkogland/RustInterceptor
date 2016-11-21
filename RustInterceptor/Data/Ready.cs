@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	class Ready {
+	public class Ready {
 		
 		Dictionary<string, string> clientInfo;
 		public Dictionary<string, string> ClientInfo { get { return clientInfo; } }
