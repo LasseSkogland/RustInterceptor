@@ -65,7 +65,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Rust\RustClient_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>D:\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +87,82 @@
     <Compile Include="Data\Message.cs" />
     <Compile Include="Data\ModelState.cs" />
     <Compile Include="Data\PlayerMetabolism.cs" />
+    <Compile Include="Data\Proto\AssemblyInfo.cs" />
+    <Compile Include="Data\Proto\EffectData.cs" />
+    <Compile Include="Data\Proto\InputMessage.cs" />
+    <Compile Include="Data\Proto\ModelState.cs" />
+    <Compile Include="Data\Proto\PlayerTick.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Approval.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Attack.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\AutoTurret.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BaseCombat.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BaseEntity.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BaseNetworkable.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BaseNPC.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BasePlayer.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BaseProjectile.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BaseResource.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BuildingBlock.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\BuildingPrivilege.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\ClientReady.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\CodeLock.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Corpse.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\CreateBuilding.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\DecayEntity.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\DudExplosive.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Entity.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\EntityList.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\EntitySlots.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Environment.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\GenericSpawner.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\HeldEntity.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Helicopter.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Item.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\ItemContainer.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\KeyLock.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Landmine.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Loot.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\LootableCorpse.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Magazine.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\MapEntity.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\MiningQuarry.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\ModuleMessage.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\OwnerFraction.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\OwnerInfo.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\ParentInfo.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PersistantPlayer.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlantEntity.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlayerAttack.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlayerInventory.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlayerLifeStory.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlayerMetabolism.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlayerNameID.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlayerProjectileAttack.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlayerProjectileRicochet.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\PlayerUpdateLoot.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\ProjectileShoot.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\ResearchTable.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\ResourceExtractor.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\RespawnInformation.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\ServerGib.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Sign.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\SleepingBag.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\Spawnable.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\SphereEntity.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\StabilityEntity.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\StorageBox.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\TakeDamage.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\UpdateItem.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\UpdateItemContainer.cs" />
+    <Compile Include="Data\Proto\ProtoBuf\WorldItem.cs" />
+    <Compile Include="Data\Proto\SilentOrbit\ProtocolBuffers\IProto.cs" />
+    <Compile Include="Data\Proto\SilentOrbit\ProtocolBuffers\Key.cs" />
+    <Compile Include="Data\Proto\SilentOrbit\ProtocolBuffers\KeyValue.cs" />
+    <Compile Include="Data\Proto\SilentOrbit\ProtocolBuffers\ProtocolBufferException.cs" />
+    <Compile Include="Data\Proto\SilentOrbit\ProtocolBuffers\ProtocolParser.cs" />
+    <Compile Include="Data\Proto\SilentOrbit\ProtocolBuffers\Wire.cs" />
+    <Compile Include="Data\Proto\UnityEngine\RaySerialized.cs" />
+    <Compile Include="Data\Proto\UnityEngine\Vector3Serialized.cs" />
     <Compile Include="Data\Ready.cs" />
     <Compile Include="Data\RPCMessage.cs" />
     <Compile Include="Data\Tick.cs" />

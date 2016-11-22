@@ -21,8 +21,8 @@ namespace Rust_Interceptor.Data {
 		internal PlayerMetabolism metabolism;
 		public PlayerMetabolism Metabolism { get { return metabolism; } }
 		
-		internal Model_State modelState;
-		public Model_State ModelState { get { return modelState; } }
+		internal BaseModelState modelState;
+		public BaseModelState ModelState { get { return modelState; } }
 
 		public ProtoBuf.PersistantPlayer PersistantData { get { return protobuf.persistantData; } }
 		public ProtoBuf.PlayerLifeStory CurrentLife { get { return protobuf.currentLife; } }
@@ -31,7 +31,7 @@ namespace Rust_Interceptor.Data {
 		public BasePlayer(ProtoBuf.BasePlayer proto) {
 			protobuf = proto;
 			metabolism = new PlayerMetabolism(proto.metabolism);
-			modelState = new Model_State(proto.modelState);
+			modelState = new BaseModelState(proto.modelState);
 			metabolism = new PlayerMetabolism(proto.metabolism);
 		}
 	}

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rust_Interceptor.Data {
-	public class Model_State {
+	public class BaseModelState {
 		internal ModelState protobuf;
 		public float Aiming { get { return protobuf.aiming; } }
 		public bool Ducked { get { return protobuf.ducked; } }
@@ -19,7 +19,7 @@ namespace Rust_Interceptor.Data {
 		public bool Sprinting { get { return protobuf.sprinting; } }
 		public float WaterLevel { get { return protobuf.waterLevel; } }
 
-		public Model_State(ModelState proto) {
+		public BaseModelState(ModelState proto) {
 			protobuf = proto;
 		}
 

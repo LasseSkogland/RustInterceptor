@@ -13,14 +13,14 @@ namespace Rust_Interceptor.Data {
 		public UnityEngine.Vector3 Position { get { return protobuf.position; } }
 		public Input_Message inputState;
 		public Input_Message InputState { get{ return inputState; } }
-		public Model_State modelState;
-		public Model_State ModelState { get { return modelState;  } }
+		public BaseModelState modelState;
+		public BaseModelState ModelState { get { return modelState;  } }
 		
 		
 
 		public Tick(Packet p) {
 			protobuf = PlayerTick.Deserialize(p);
-			modelState = new Model_State(protobuf.modelState);
+			modelState = new BaseModelState(protobuf.modelState);
 			inputState = new Input_Message(protobuf.inputState);
 		}
 
