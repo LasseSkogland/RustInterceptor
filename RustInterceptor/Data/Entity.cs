@@ -42,17 +42,19 @@ namespace Rust_Interceptor.Data {
 		}
 
 		public static void UpdatePosition(Packet p) {
-			while (p.unread > 28L) {
+			/* EntityPosition packets may contain multiple positions */
+			while (p.unread >= 28L) {
+				/* Entity UID */
 				var id = p.UInt32();
 				CheckEntity(id);
-				/* Read 2 Vector3f in form of 3 floats each, Position and Rotation */
+				/* Read 2 Vector3 in form of 3 floats each, Position and Rotation */
 				entities[id].protobuf.baseEntity.pos.Set(p.Float(), p.Float(), p.Float());
 				entities[id].protobuf.baseEntity.rot.Set(p.Float(), p.Float(), p.Float());
 			}
 		}
 
 		public static uint CreateOrUpdate(Packet p) {
-			/* Entity Number, for internal use */
+			/* Entity Number/Order, for internal use */
 			var num = p.UInt32();
 			ProtoBuf.Entity proto = global::ProtoBuf.Entity.Deserialize(p);
 			/* All Networkables have Unique Identifiers */
