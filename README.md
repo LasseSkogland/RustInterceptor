@@ -7,9 +7,9 @@
  - **All other handlers are complete**
  
 ### Dependencies:
-- Steam\steamapps\common\Rust\RustClient_Data\Managed\Facepunch.Network.dll
-- Steam\steamapps\common\Rust\RustClient_Data\Managed\Rust.Data.dll
-- Steam\steamapps\common\Rust\RustClient_Data\Managed\UnityEngine.dll
+- ~~Steam\steamapps\common\Rust\RustClient_Data\Managed\Facepunch.Network.dll~~
+- ~~Steam\steamapps\common\Rust\RustClient_Data\Managed\Rust.Data.dll~~
+- ~~Steam\steamapps\common\Rust\RustClient_Data\Managed\UnityEngine.dll~~
 - Steam\steamapps\common\Rust\RustClient_Data\Plugins\RakNet.dll
 
 ### Disclaimer
