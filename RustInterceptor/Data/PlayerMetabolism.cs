@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Rust_Interceptor.Data {
+﻿namespace Rust_Interceptor.Data {
 	public class PlayerMetabolism {
 		internal ProtoBuf.PlayerMetabolism protobuf;
 		public float Health { get { return protobuf.health; } }

@@ -1,11 +1,12 @@
-﻿using System;
-using System.IO;
-using Facepunch.Network.Raknet;
+﻿using Facepunch.Network.Raknet;
 using Newtonsoft.Json;
+using System;
+using System.IO;
+using System.Text;
 
 namespace Rust_Interceptor {
 	[JsonConverter(typeof(Serializer.PacketConverter))]
-	public class Packet : Network.Read {
+	public class Packet : Stream {
 		#region ENUM
 
 		public enum RakNet : byte {
@@ -288,17 +289,17 @@ namespace Rust_Interceptor {
 			}
 		}
 
-		public override int length {
+		public int length {
 			get {
 				return (int)baseStream.Length;
 			}
 		}
 
-		public override int position {
+		public int position {
 			get { return (int)baseStream.Position; }
 		}
 
-		public override int unread {
+		public int unread {
 			get { return (int)(incomingLength - baseStream.Position); }
 		}
 
@@ -330,47 +331,47 @@ namespace Rust_Interceptor {
 			baseStream.SetLength(value);
 		}
 
-		public override byte UInt8() {
+		public byte UInt8() {
 			return (byte)ReadByte();
 		}
 
-		public override bool Bit() {
+		public bool Bit() {
 			return UInt8() > 0U;
 		}
 
-		public override sbyte Int8() {
+		public sbyte Int8() {
 			return (sbyte)UInt8();
 		}
 
-		public override long Int64() {
+		public long Int64() {
 			return BitConverter.ToInt64(Read(8), 0);
 		}
 
-		public override int Int32() {
+		public int Int32() {
 			return BitConverter.ToInt32(Read(4), 0);
 		}
 
-		public override short Int16() {
+		public short Int16() {
 			return BitConverter.ToInt16(Read(2), 0);
 		}
 
-		public override ulong UInt64() {
+		public ulong UInt64() {
 			return BitConverter.ToUInt64(Read(8), 0);
 		}
 
-		public override uint UInt32() {
+		public uint UInt32() {
 			return BitConverter.ToUInt32(Read(4), 0);
 		}
 
-		public override ushort UInt16() {
+		public ushort UInt16() {
 			return BitConverter.ToUInt16(Read(2), 0);
 		}
 
-		public override float Float(bool unused = false) {
+		public float Float(bool unused = false) {
 			return BitConverter.ToSingle(Read(4), 0);
 		}
 
-		public override double Double() {
+		public double Double() {
 			return BitConverter.ToDouble(Read(8), 0);
 		}
 
@@ -385,7 +386,7 @@ namespace Rust_Interceptor {
 			return baseStream.Read(buffer, offset, count);
 		}
 
-		public new byte[] BytesWithSize() {
+		public byte[] BytesWithSize() {
 			uint num = UInt32();
 			if (num == 0)
 				return null;
@@ -395,6 +396,29 @@ namespace Rust_Interceptor {
 			if (baseStream.Read(buffer, 0, (int)num) != num)
 				return (byte[])null;
 			return buffer;
+		}
+
+		public string String() {
+			byte[] bytes = BytesWithSize();
+			if (bytes == null)
+				return string.Empty;
+			return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+		}
+
+		public uint EntityID() {
+			return this.UInt32();
+		}
+
+		public uint GroupID() {
+			return this.UInt32();
+		}
+
+		public UnityEngine.Vector3 Vector3(bool compressed = false) {
+			return new UnityEngine.Vector3(this.Float(compressed), this.Float(compressed), this.Float(compressed));
+		}
+
+		public UnityEngine.Ray Ray() {
+			return new UnityEngine.Ray(this.Vector3(false), this.Vector3(false));
 		}
 
 	}

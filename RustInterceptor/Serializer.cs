@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 
@@ -254,8 +254,8 @@ namespace Rust_Interceptor {
 				};
 				writer.WriteStartObject();
 				if (entity.IsPlayer) {
-					Serialize("Player Name", entity.PlayerName);
-					Serialize("User ID", entity.PlayerUserID);
+					Serialize("Player Name", entity.Player.Name);
+					Serialize("User ID", entity.Player.UserID);
 				}
 				Serialize("UID", entity.UID);
 				Serialize("Group", entity.Group);
