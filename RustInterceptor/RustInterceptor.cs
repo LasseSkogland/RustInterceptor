@@ -1,7 +1,10 @@
 ﻿using Facepunch.Network.Raknet;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -33,6 +36,34 @@ namespace Rust_Interceptor {
 		internal readonly Thread backgroundThread;
 
 		internal Action<Packet> packetHandlerCallback = null;
+
+		public static bool CopyDependencies(string rustDataPath) {
+			try {
+				File.Copy(Path.Combine(rustDataPath, @"\Managed\Rust.Data.dll"), "Rust.Data.dll", true);
+				File.Copy(Path.Combine(rustDataPath, @"\Managed\UnityEngine.dll"), "UnityEngine.dll", true);
+				File.Copy(Path.Combine(rustDataPath, @"\Plugins\RakNet.dll"), "RakNet.dll", true);
+				return true;
+			} catch (Exception) {
+				return false;
+			}
+		}
+
+		public static bool FindDependencies() {
+			var steamPath = ((string)Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam").GetValue("SteamPath")).Replace('/', Path.DirectorySeparatorChar);
+			if (Directory.Exists(Path.Combine(steamPath + @"\steamapps\common\Rust")))
+				return CopyDependencies(Path.Combine(steamPath, @"steamapps\common\Rust\RustClient_Data"));
+			var libFolders = File.ReadAllLines(Path.Combine(steamPath, @"\steamapps\libraryfolders.vdf"));
+			foreach (string line in libFolders) {
+				var item = line.Trim('\t').Replace("\t\t", "=").Replace("\"", "");
+				if (item.Contains("LibraryFolders") || item.Length == 1) continue;
+				var value = item.Split('=');
+				int num = 0;
+				if (int.TryParse(value[0], out num)) {
+					if (Directory.Exists(Path.Combine(value[1], @"\steamapps\common\Rust"))) return CopyDependencies(Path.Combine(value[1], @"steamapps\common\Rust\RustClient_Data"));
+				}
+			}
+			return false;
+		}
 
 		public RustInterceptor(string server = "127.0.0.1", int port = 28015, int listenPort = 5678) {
 			serverIP = server;

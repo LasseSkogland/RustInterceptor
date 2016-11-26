@@ -66,6 +66,9 @@ namespace Rust_Interceptor.Data {
 		internal BaseResource resource;
 		public BaseResource Resource { get { return resource; } }
 
+		internal BaseProjectile projectile;
+		public BaseProjectile Projectile { get { return projectile; } }
+
 		/* WorldItem */
 		internal BaseItem worldItem;
 		public BaseItem WorldItem { get { return worldItem; } }
@@ -101,6 +104,7 @@ namespace Rust_Interceptor.Data {
 			/* Entity Number/Order, for internal use */
 			var num = p.UInt32();
 			ProtoBuf.Entity proto = global::ProtoBuf.Entity.Deserialize(p);
+			
 			/* All Networkables have Unique Identifiers */
 			var id = proto.baseNetworkable.uid;
 			if (CheckEntity(id))
@@ -114,16 +118,15 @@ namespace Rust_Interceptor.Data {
 
 		public Entity(ProtoBuf.Entity proto) {
 			protobuf = proto;
-			player = new BasePlayer(proto.basePlayer);
-			resource = new BaseResource(proto.resource);
-			buildingBlock = new BaseBuildingBlock(proto.buildingBlock);
-			worldItem = new BaseItem(proto.worldItem.item);
-			environment = new BaseEnvironment(proto.environment);
-			resource = new BaseResource(proto.resource);
-			codeLock = new BaseCodeLock(proto.codeLock);
-			buildingPrivilege = new BaseBuildingPrivilege(proto.buildingPrivilege);
+			if(proto.basePlayer != null )player = new BasePlayer(proto.basePlayer);
+			if(proto.resource != null )resource = new BaseResource(proto.resource);
+			if(proto.buildingBlock != null) buildingBlock = new BaseBuildingBlock(proto.buildingBlock);
+			if (proto.worldItem != null) worldItem = new BaseItem(proto.worldItem.item);
+			if (proto.environment != null) environment = new BaseEnvironment(proto.environment);
+			if (proto.codeLock != null) codeLock = new BaseCodeLock(proto.codeLock);
+			if (proto.buildingPrivilege != null) buildingPrivilege = new BaseBuildingPrivilege(proto.buildingPrivilege);
 			if(proto.storageBox != null) storageBoxContents = new BaseItem.BaseItemContainer(proto.storageBox.contents);
-
+			if (proto.baseProjectile != null) projectile = new BaseProjectile(proto.baseProjectile);
 
 			if (IsPlayer) {
 				players.Add(this);
@@ -177,12 +180,12 @@ namespace Rust_Interceptor.Data {
 		public class BaseCodeLock {
 			ProtoBuf.CodeLock protobuf;
 			public bool HasCode { get { return protobuf.hasCode; } }
-			internal BasePrivate _private;
-			public BasePrivate Private { get { return _private; } }
+			internal BasePrivate pv;
+			public BasePrivate Private { get { return pv; } }
 
 			public BaseCodeLock(ProtoBuf.CodeLock proto) {
 				protobuf = proto;
-				_private = new BasePrivate(protobuf.pv);
+				pv = new BasePrivate(protobuf.pv);
 			}
 
 			public class BasePrivate {
@@ -191,6 +194,14 @@ namespace Rust_Interceptor.Data {
 				public List<ulong> Users { get { return protobuf.users; } }
 				public BasePrivate(ProtoBuf.CodeLock.Private proto) { protobuf = proto; }
 			}
+		}
+
+		public class BaseProjectile {
+			ProtoBuf.BaseProjectile protobuf;
+			public int AmmoType { get { return protobuf.primaryMagazine.ammoType; } }
+			public int Capacity { get { return protobuf.primaryMagazine.capacity; } }
+			public int Contents { get { return protobuf.primaryMagazine.contents; } }
+			public BaseProjectile(ProtoBuf.BaseProjectile proto) { protobuf = proto; }
 		}
 
 
