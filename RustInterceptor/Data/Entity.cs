@@ -104,7 +104,7 @@ namespace Rust_Interceptor.Data {
 			/* Entity Number/Order, for internal use */
 			var num = p.UInt32();
 			ProtoBuf.Entity proto = global::ProtoBuf.Entity.Deserialize(p);
-			
+
 			/* All Networkables have Unique Identifiers */
 			var id = proto.baseNetworkable.uid;
 			if (CheckEntity(id))
@@ -118,14 +118,14 @@ namespace Rust_Interceptor.Data {
 
 		public Entity(ProtoBuf.Entity proto) {
 			protobuf = proto;
-			if(proto.basePlayer != null )player = new BasePlayer(proto.basePlayer);
-			if(proto.resource != null )resource = new BaseResource(proto.resource);
-			if(proto.buildingBlock != null) buildingBlock = new BaseBuildingBlock(proto.buildingBlock);
+			if (proto.basePlayer != null) player = new BasePlayer(proto.basePlayer);
+			if (proto.resource != null) resource = new BaseResource(proto.resource);
+			if (proto.buildingBlock != null) buildingBlock = new BaseBuildingBlock(proto.buildingBlock);
 			if (proto.worldItem != null) worldItem = new BaseItem(proto.worldItem.item);
 			if (proto.environment != null) environment = new BaseEnvironment(proto.environment);
 			if (proto.codeLock != null) codeLock = new BaseCodeLock(proto.codeLock);
 			if (proto.buildingPrivilege != null) buildingPrivilege = new BaseBuildingPrivilege(proto.buildingPrivilege);
-			if(proto.storageBox != null) storageBoxContents = new BaseItem.BaseItemContainer(proto.storageBox.contents);
+			if (proto.storageBox != null) storageBoxContents = new BaseItem.BaseItemContainer(proto.storageBox.contents);
 			if (proto.baseProjectile != null) projectile = new BaseProjectile(proto.baseProjectile);
 
 			if (IsPlayer) {

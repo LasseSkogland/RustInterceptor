@@ -29,7 +29,8 @@ Under construction...
 **Dump Packets**
 ``` csharp
 private static void Main(string[] args) {
-	RustInterceptor interceptor;
+	RustInterceptor.FindDependencies();
+	RustInterceptor rusti;
 	Console.Write("Server IP: ");
 	string ip = Console.ReadLine();
 	int port = -1;
@@ -41,24 +42,25 @@ private static void Main(string[] args) {
 			Console.WriteLine("Try again...");
 		}
 	}
-	interceptor = new RustInterceptor(server: ip, port: port);
+	rusti = new RustInterceptor(server: ip, port: port);
 	Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs eventArgs) => {
-		interceptor.SavePackets("packets.json");
+		rusti.SavePackets("packets.json");
 	};
-	interceptor.ClientPackets = true;
-	interceptor.AddPacketToFilter(0);
-	interceptor.Start();
-	while (interceptor.IsAlive()) {
-		Thread.Sleep(10);
+	rusti.ClientPackets = true;
+	rusti.AddPacketToFilter(0);
+	rusti.Start();
+	while (rusti.IsAlive) {
+		System.Threading.Thread.Sleep(10);
 	}
 	Console.WriteLine("Shutting down...");
-	interceptor.SavePackets("packets.json");
+	rusti.SavePackets("packets.json");
 }
 ```
 **HandleEntities**
 ``` csharp
 private static void Main(string[] args) {
-	RustInterceptor interceptor;
+	RustInterceptor.FindDependencies();
+	RustInterceptor rusti;
 	Console.Write("Server IP: ");
 	string ip = Console.ReadLine();
 	int port = -1;
@@ -70,25 +72,27 @@ private static void Main(string[] args) {
 			Console.WriteLine("Try again...");
 		}
 	}
-	interceptor = new RustInterceptor(server: ip, port: port);
-	interceptor.ClientPackets = false;
-	interceptor.AddPacketToFilter(Packet.Rust.Entities);
-    interceptor.AddPacketToFilter(Packet.Rust.EntityPosition);
-	interceptor.Start();
+	rusti = new RustInterceptor(server: ip, port: port);
+	rusti.ClientPackets = false;
+	rusti.RememberPackets = false;
 	Packet packet;
-	while (interceptor.IsAlive()) {
-		try {
-			packet = interceptor.GetPacket();
-			switch ((Rust)packet.packetID) {
-				case Packet.Rust.Entities:
-					Packets.Entity.CreateOrUpdate(packet);
-					break;
-				case Packet.Rust.EntityPosition:
-					Packets.Entity.UpdatePosition(packet);
-					break;
-			}
-		} catch (Exception) {}
+	Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs arg) => {
+		if (arg.Cancel) rusti.Stop();
+	};
+	rusti.Start();
+	while (rusti.IsAlive) {
+		rusti.GetPacket(out packet);
+		switch ((Packet.Rust)packet.packetID) {
+			case Packet.Rust.Entities:
+				Data.Entity.CreateOrUpdate(packet);
+				break;
+			case Packet.Rust.EntityPosition:
+				Data.Entity.UpdatePosition(packet);
+				break;
+		}
 	}
+	Console.WriteLine("Shutting down...");
+	Console.ReadKey();
 }
 ```
 
