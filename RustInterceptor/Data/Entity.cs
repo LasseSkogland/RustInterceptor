@@ -100,7 +100,7 @@ namespace Rust_Interceptor.Data {
 			}
 		}
 
-		public static uint CreateOrUpdate(Packet p) {
+        public static uint CreateOrUpdate(Packet p) {
 			/* Entity Number/Order, for internal use */
 			var num = p.UInt32();
 			ProtoBuf.Entity proto = global::ProtoBuf.Entity.Deserialize(p);
@@ -114,9 +114,18 @@ namespace Rust_Interceptor.Data {
 				entities[id].num = num;
 			}
 			return id;
-		}
+        }
 
-		public Entity(ProtoBuf.Entity proto) {
+        public static bool Destroy(uint uid, byte destroy_mode)
+        {
+            if (entities.ContainsKey(uid) == true && destroy_mode == 0)
+            {
+                return entities.Remove(uid);
+            }
+            return false;
+        }
+
+        public Entity(ProtoBuf.Entity proto) {
 			protobuf = proto;
 			if (proto.basePlayer != null) player = new BasePlayer(proto.basePlayer);
 			if (proto.resource != null) resource = new BaseResource(proto.resource);

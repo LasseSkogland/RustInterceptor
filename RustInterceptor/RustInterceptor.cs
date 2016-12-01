@@ -126,7 +126,7 @@ namespace Rust_Interceptor {
 		public void SavePackets(Packet[] packet, string filename = "packets.json", Newtonsoft.Json.Formatting formatting = Newtonsoft.Json.Formatting.Indented, bool informative = true) {
 			var outs = File.Create(filename);
 			Serializer.informativeDump = informative;
-			string json = Serializer.Serialize(packet);
+			string json = Serializer.Serialize(packet, informative);
 			outs.Write(Encoding.ASCII.GetBytes(json), 0, json.Length);
 			outs.Flush();
 			outs.Close();
