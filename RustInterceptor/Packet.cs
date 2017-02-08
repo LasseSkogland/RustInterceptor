@@ -1,4 +1,4 @@
-﻿using Facepunch.Network.Raknet;
+using Facepunch.Network.Raknet;
 using Newtonsoft.Json;
 using System;
 using System.IO;

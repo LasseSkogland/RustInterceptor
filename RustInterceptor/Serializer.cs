@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -247,22 +247,21 @@ namespace Rust_Interceptor {
 			}
 
 			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-				var entity = (Data.Entity)value;
+				var entity = (ProtoBuf.Entity)value;
 				Action<string, object> Serialize = (string name, object obj) => {
 					writer.WritePropertyName(name);
 					serializer.Serialize(writer, obj);
 				};
 				writer.WriteStartObject();
-				if (entity.IsPlayer) {
-					Serialize("Player Name", entity.Player.Name);
-					Serialize("User ID", entity.Player.UserID);
+				if (entity.basePlayer != null) {
+					Serialize("Player Name", entity.basePlayer.name);
+					Serialize("User ID", entity.basePlayer.userid);
 				}
-				Serialize("UID", entity.UID);
-				Serialize("Group", entity.Group);
-				Serialize("Number", entity.Number);
-				Serialize("Player", entity.IsPlayer);
-				Serialize("Position", entity.Position);
-				Serialize("Rotation", entity.Rotation);
+				Serialize("UID", entity.baseNetworkable.uid);
+				Serialize("Group", entity.baseNetworkable.group);
+				Serialize("Player", entity.basePlayer != null);
+				Serialize("Position", entity.baseEntity.pos);
+				Serialize("Rotation", entity.baseEntity.rot);
 				//if (entity.IsPlayer) Serialize("Inventory", entity.Inventory);
 				writer.WriteEndObject();
 			}

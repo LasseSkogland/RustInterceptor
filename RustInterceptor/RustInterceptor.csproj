@@ -49,7 +49,7 @@
     </Reference>
     <Reference Include="Rust.Data, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Rust\RustClient_Data\Managed\Rust.Data.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Rust\RustClient_Data\Managed\Rust.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,18 +60,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Rust\RustClient_Data\Managed\UnityEngine.dll</HintPath>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Rust\RustClient_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Approved.cs" />
     <Compile Include="Data\Auth.cs" />
-    <Compile Include="Data\BasePlayer.cs" />
     <Compile Include="Data\ConsoleCommand.cs" />
     <Compile Include="Data\ConsoleMessage.cs" />
     <Compile Include="Data\DisconnectReason.cs" />
-    <Compile Include="Data\Effect.cs" />
     <Compile Include="Data\Entity.cs" />
     <Compile Include="Data\GiveUserInformation.cs" />
     <Compile Include="Data\GroupDestroy.cs" />
@@ -79,14 +77,9 @@
     <Compile Include="Data\GroupChange.cs" />
     <Compile Include="Data\GroupEnter.cs" />
     <Compile Include="Data\GroupLeave.cs" />
-    <Compile Include="Data\InputMessage.cs" />
     <Compile Include="Data\Message.cs" />
-    <Compile Include="Data\ModelState.cs" />
-    <Compile Include="Data\PlayerMetabolism.cs" />
-    <Compile Include="Data\Ready.cs" />
     <Compile Include="Data\RPCMessage.cs" />
-    <Compile Include="Data\Tick.cs" />
-    <Compile Include="Data\BaseItem.cs" />
+    <Compile Include="PacketHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RustInterceptor.cs" />
     <Compile Include="Internal\RakNetNative.cs" />
@@ -96,11 +89,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="C:\Program Files (x86)\Steam\steamapps\common\Rust\RustClient_Data\Plugins\RakNet.dll">
+    <Content Include="RakNet.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
