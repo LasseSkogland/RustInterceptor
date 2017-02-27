@@ -37,17 +37,6 @@ namespace Rust_Interceptor {
 
 		internal Action<Packet> packetHandlerCallback = null;
 
-		public static bool CopyDependencies(string rustDataPath) {
-			try {
-				File.Copy(Path.Combine(rustDataPath, @"\Managed\Rust.Data.dll"), "Rust.Data.dll", true);
-				File.Copy(Path.Combine(rustDataPath, @"\Managed\UnityEngine.dll"), "UnityEngine.dll", true);
-				File.Copy(Path.Combine(rustDataPath, @"\Plugins\RakNet.dll"), "RakNet.dll", true);
-				return true;
-			} catch (Exception) {
-				return false;
-			}
-		}
-
 		public RustInterceptor(string server = "127.0.0.1", int port = 28015, int listenPort = 5678) {
 			serverIP = server;
 			serverPort = port;

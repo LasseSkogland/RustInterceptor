@@ -97,5 +97,6 @@ private static void Main(string[] args) {
 ```
 
 Bitcoin: 3BYt2fDDd1kQUAWVKR51o9fxcU4eggc8Xq
+Paypal.me: paypal.me/LasseSkogland
 
 ![Bitcoin QR](http://i.imgur.com/Q7S8buL.png)
