@@ -39,6 +39,7 @@ namespace Rust_Interceptor {
 		internal Action<Packet> packetHandlerCallback = null;
 
 		public RustInterceptor(string server = "127.0.0.1", int port = 28015, int listenPort = 5678) {
+            StringPool.Fill();
 			serverIP = server;
 			serverPort = port;
 			this.listenPort = listenPort;
