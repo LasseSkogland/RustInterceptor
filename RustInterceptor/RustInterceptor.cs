@@ -1,5 +1,6 @@
 using Facepunch.Network.Raknet;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -92,23 +93,32 @@ namespace Rust_Interceptor {
 
 		public Packet[] LoadPackets(string filename = "packets.json") {
 			var json = File.ReadAllText(filename);
-			return Newtonsoft.Json.JsonConvert.DeserializeObject<Packet[]>(json);
+			return JsonConvert.DeserializeObject<Packet[]>(json);
 		}
 
-		public void SavePackets(Packet[] packet, string filename = "packets.json", Newtonsoft.Json.Formatting formatting = Newtonsoft.Json.Formatting.Indented, bool informative = true) {
-			var outs = File.Create(filename);
+		public void SavePackets(Packet[] packet, string filename = "packets.json", Formatting formatting = Formatting.Indented, bool informative = true) {
+			FileStream fileOutput = File.Create(filename);
 			Serializer.informativeDump = informative;
-			string json = Serializer.Serialize(packet, informative);
-			outs.Write(Encoding.ASCII.GetBytes(json), 0, json.Length);
-			outs.Flush();
-			outs.Close();
+            StringWriter stringWriter = new StringWriter();
+            JsonWriter jsonWriter = new JsonTextWriter(stringWriter);
+            jsonWriter.Formatting = formatting;
+            jsonWriter.WriteStartArray();
+            foreach (Packet p in packet) {
+                Serializer.Serialize(jsonWriter, p);
+            }
+            jsonWriter.WriteEndArray();
+            string jsonString = stringWriter.ToString();
+            stringWriter.Close();
+            fileOutput.Write(Encoding.ASCII.GetBytes(jsonString), 0, jsonString.Length);
+			fileOutput.Flush();
+			fileOutput.Close();
 		}
 
-		public void SavePackets(List<Packet> packets, string filename = "packets.json", Newtonsoft.Json.Formatting formatting = Newtonsoft.Json.Formatting.Indented, bool informative = true) {
+		public void SavePackets(List<Packet> packets, string filename = "packets.json", Formatting formatting = Formatting.Indented, bool informative = true) {
 			SavePackets(packets.ToArray(), filename, formatting, informative);
 		}
 
-		public void SavePackets(string filename = "packets.json", Newtonsoft.Json.Formatting formatting = Newtonsoft.Json.Formatting.Indented, bool informative = true) {
+		public void SavePackets(string filename = "packets.json", Formatting formatting = Formatting.Indented, bool informative = true) {
 			if (!RememberPackets) {
 				Console.WriteLine("There are no packets to save. Set 'RememberPackets' before you start or pass in packets to this function");
 				return;

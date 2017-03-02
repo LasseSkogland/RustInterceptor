@@ -86,6 +86,7 @@
     <Compile Include="Packet.cs" />
     <Compile Include="Internal\RakNetPeer.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="StringPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

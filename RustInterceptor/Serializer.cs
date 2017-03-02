@@ -133,7 +133,8 @@ namespace Rust_Interceptor {
 					serializer.Serialize(writer, obj);
 				};
 				if (Informative) {
-					Serialize(string.Format("Name ({0})", packet.packetID), packet.GetName());
+                    Serialize("ID", packet.packetID);
+					Serialize("Name", packet.GetName());
 					Serialize("Type", packet.GetPacketTypeName());
 					Serialize("Origin", packet.GetOrigin());
 					Serialize("Delay", packet.delay);
@@ -151,7 +152,7 @@ namespace Rust_Interceptor {
 						packet.Position = 1;
 						switch (packet.rustID) {
 							case Packet.Rust.Approved:
-								Serialize("ProtoBuf", ProtoBuf.Approval.Deserialize(packet));
+								Serialize("Approval", ProtoBuf.Approval.Deserialize(packet));
 								break;
 							case Packet.Rust.Auth:
 								var bytes = packet.BytesWithSize();
@@ -262,7 +263,6 @@ namespace Rust_Interceptor {
 				Serialize("Player", entity.basePlayer != null);
 				Serialize("Position", entity.baseEntity.pos);
 				Serialize("Rotation", entity.baseEntity.rot);
-				//if (entity.IsPlayer) Serialize("Inventory", entity.Inventory);
 				writer.WriteEndObject();
 			}
 		}
