@@ -22,6 +22,13 @@ namespace Rust_Interceptor {
 				return isAlive;
 			}
 		}
+
+        public int RememberedPacketCount {
+            get {
+                return remeberedPackets.Count;
+            }
+        }
+
 		internal static Packet serverPacket;
 		internal static Packet clientPacket;
 		internal static List<Packet> remeberedPackets;
@@ -98,21 +105,15 @@ namespace Rust_Interceptor {
 		}
 
 		public void SavePackets(Packet[] packet, string filename = "packets.json", Formatting formatting = Formatting.Indented, bool informative = true) {
-			FileStream fileOutput = File.Create(filename);
 			Serializer.informativeDump = informative;
-            StringWriter stringWriter = new StringWriter();
-            JsonWriter jsonWriter = new JsonTextWriter(stringWriter);
+            JsonWriter jsonWriter = new JsonTextWriter(new StreamWriter(File.Create(filename)));
             jsonWriter.Formatting = formatting;
             jsonWriter.WriteStartArray();
             foreach (Packet p in packet) {
                 Serializer.Serialize(jsonWriter, p);
             }
             jsonWriter.WriteEndArray();
-            string jsonString = stringWriter.ToString();
-            stringWriter.Close();
-            fileOutput.Write(Encoding.ASCII.GetBytes(jsonString), 0, jsonString.Length);
-			fileOutput.Flush();
-			fileOutput.Close();
+            jsonWriter.Close();
 		}
 
 		public void SavePackets(List<Packet> packets, string filename = "packets.json", Formatting formatting = Formatting.Indented, bool informative = true) {
