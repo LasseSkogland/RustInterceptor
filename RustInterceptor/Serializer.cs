@@ -11,7 +11,7 @@ namespace Rust_Interceptor {
 	public class Serializer {
 
 		internal static void Serialize(JsonWriter writer, object obj) {
-			JsonSerializer serializer = new JsonSerializer();
+			JsonSerializer serializer = new JsonSerializer { NullValueHandling = NullValueHandling.Ignore };
 			serializer.Formatting = Formatting.Indented;
 			serializer.ContractResolver = new JsonResolver();
 			serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -152,7 +152,7 @@ namespace Rust_Interceptor {
 						packet.Position = 1;
 						switch (packet.rustID) {
 							case Packet.Rust.Approved:
-								Serialize("Approval", ProtoBuf.Approval.Deserialize(packet));
+								Serialize("ProtoBuf", ProtoBuf.Approval.Deserialize(packet));
 								break;
 							case Packet.Rust.Auth:
 								var bytes = packet.BytesWithSize();
@@ -274,22 +274,15 @@ namespace Rust_Interceptor {
 
 			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
 				Vector3 vec;
-				float[] data = serializer.Deserialize<float[]>(reader);
-				vec = new Vector3(data[0], data[1], data[2]);
+				var data = serializer.Deserialize<string>(reader).Split(':');
+
+				vec = new Vector3(float.Parse(data[0]), float.Parse(data[1]), float.Parse(data[2]));
 				return vec;
 			}
 
 			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
 				var vec = (Vector3)value;
-				Action<string, object> Serialize = (string name, object obj) => {
-					writer.WritePropertyName(name);
-					serializer.Serialize(writer, obj);
-				};
-				writer.WriteStartObject();
-				Serialize("x", vec.x);
-				Serialize("y", vec.y);
-				Serialize("z", vec.z);
-				writer.WriteEndObject();
+                serializer.Serialize(writer, String.Format("{0}:{1}:{2}", vec.x, vec.y, vec.z));
 			}
 		}
 

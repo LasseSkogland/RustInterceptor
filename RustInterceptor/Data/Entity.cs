@@ -7,10 +7,10 @@ namespace Rust_Interceptor.Data {
         public static List<EntityUpdate> GetPositions(Packet p) {
             List<EntityUpdate> updates = new List<EntityUpdate>();
             /* EntityPosition packets may contain multiple positions */
-            while (p.unread >= 28L) {
+            while (p.unread >= 28L /* Uint32 = 4bytes, Float = 4bytes. Uint32 + (Float * 6) = 28 */) {
                 EntityUpdate update = new EntityUpdate();
                 /* Entity UID */
-                update.id = p.UInt32();
+                update.uid = p.UInt32();
                 /* Read 2 Vector3, Position and Rotation */
                 update.position = p.Vector3();
                 update.rotation = p.Vector3();
@@ -27,8 +27,8 @@ namespace Rust_Interceptor.Data {
         }
 
         public class EntityUpdate {
-            internal uint id;
-            public uint ID { get { return id; } }
+            internal uint uid;
+            public uint UID { get { return uid; } }
             internal Vector3 position;
             public Vector3 Position { get { return position; } }
             internal Vector3 rotation;
