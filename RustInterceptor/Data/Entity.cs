@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Rust_Interceptor.Data {
 
-    public class Entity {
+	public class Entity {
 		uint networkOrder = 0;
 		internal ProtoBuf.Entity proto;
 		public ProtoBuf.Entity Data {
@@ -14,7 +14,7 @@ namespace Rust_Interceptor.Data {
 				proto = value;
 				UID = proto.baseNetworkable.uid;
 				Position = proto.baseEntity.pos;
-				Rotation = Quaternion.Euler(proto.baseEntity.rot);
+				Rotation = proto.baseEntity.rot;
 			}
 		}
 		public bool IsPlayer { get { return proto.basePlayer != null; } }
@@ -22,9 +22,9 @@ namespace Rust_Interceptor.Data {
 
 		public UInt32 UID { get; private set; }
 		public Vector3 Position { get; private set; }
-		public Quaternion Rotation { get; private set; }
+		public Vector3 Rotation { get; private set; }
 
-		static Dictionary<UInt32, Entity> entities = new Dictionary<UInt32, Entity>();
+		static Dictionary<UInt32, Entity> entities = new Dictionary<uint, Entity>();
 		public static Entity GetLocalPlayer() {
 			return First(item => item.Value.IsLocalPlayer);
 		}
@@ -60,8 +60,7 @@ namespace Rust_Interceptor.Data {
 				Entity entity = entities[uid];
 				entity.networkOrder = networkOrder;
 				entity.proto = entityInfo;
-				lock (entities)
-					entities[uid] = entity;
+				entities[uid] = entity;
 				return entity;
 			} else {
 				Entity entity = new Entity();
@@ -80,9 +79,8 @@ namespace Rust_Interceptor.Data {
 			if (!Has(update.uid)) return null;
 			Entity entity = entities[update.uid];
 			entity.Position = update.position;
-			entity.Rotation = Quaternion.Euler(update.rotation);
-			lock (entities)
-				entities[update.uid] = entity;
+			entity.Rotation = update.rotation;
+			entities[update.uid] = entity;
 			return entity;
 		}
 
@@ -90,42 +88,42 @@ namespace Rust_Interceptor.Data {
 			List<Entity> entities = new List<Entity>();
 			foreach (var update in updates) {
 				var entity = UpdatePosistion(update);
-				if(entity != null) entities.Add(entity);
+				if (entity != null) entities.Add(entity);
 			}
 			return entities.Count > 0 ? entities : null;
 		}
 
 		public static List<EntityUpdate> ParsePositions(Packet p) {
-            List<EntityUpdate> updates = new List<EntityUpdate>();
-            /* EntityPosition packets may contain multiple positions */
-            while (p.unread >= 28L /* Uint32 = 4bytes, Float = 4bytes. Uint32 + (Float * 6) = 28 */) {
-                EntityUpdate update = new EntityUpdate();
-                /* Entity UID */
-                update.uid = p.UInt32();
-                /* Read 2 Vector3, Position and Rotation */
-                update.position = p.Vector3();
-                update.rotation = p.Vector3();
-                updates.Add(update);
-            }
-            return updates;
-        }
+			List<EntityUpdate> updates = new List<EntityUpdate>();
+			/* EntityPosition packets may contain multiple positions */
+			while (p.unread >= 28L /* Uint32 = 4bytes, Float = 4bytes. Uint32 + (Float * 6) = 28 */) {
+				EntityUpdate update = new EntityUpdate();
+				/* Entity UID */
+				update.uid = p.UInt32();
+				/* Read 2 Vector3, Position and Rotation */
+				update.position = p.Vector3();
+				update.rotation = p.Vector3();
+				updates.Add(update);
+			}
+			return updates;
+		}
 
-        public static uint ParseEntity(Packet p, out ProtoBuf.Entity entity) {
-            /* Entity Number/Order */
-            var num = p.UInt32();
-            entity = ProtoBuf.Entity.Deserialize(p);
-            return num;
-        }
+		public static uint ParseEntity(Packet p, out ProtoBuf.Entity entity) {
+			/* Entity Number/Order */
+			var num = p.UInt32();
+			entity = ProtoBuf.Entity.Deserialize(p);
+			return num;
+		}
 
-        public class EntityUpdate {
-            internal uint uid;
-            public uint UID { get { return uid; } }
-            internal Vector3 position;
-            public Vector3 Position { get { return position; } }
-            internal Vector3 rotation;
-            public Vector3 Rotation { get { return rotation; } }
-        }
+		public class EntityUpdate {
+			internal uint uid;
+			public uint UID { get { return uid; } }
+			internal Vector3 position;
+			public Vector3 Position { get { return position; } }
+			internal Vector3 rotation;
+			public Vector3 Rotation { get { return rotation; } }
+		}
 
 
-    }
+	}
 }
