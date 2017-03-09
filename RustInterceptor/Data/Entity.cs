@@ -60,7 +60,8 @@ namespace Rust_Interceptor.Data {
 				Entity entity = entities[uid];
 				entity.networkOrder = networkOrder;
 				entity.proto = entityInfo;
-				entities[uid] = entity;
+				lock (entities)
+					entities[uid] = entity;
 				return entity;
 			} else {
 				Entity entity = new Entity();
@@ -80,7 +81,8 @@ namespace Rust_Interceptor.Data {
 			Entity entity = entities[update.uid];
 			entity.Position = update.position;
 			entity.Rotation = Quaternion.Euler(update.rotation);
-			entities[update.uid] = entity;
+			lock (entities)
+				entities[update.uid] = entity;
 			return entity;
 		}
 
