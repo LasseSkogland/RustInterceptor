@@ -1,10 +1,95 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Rust_Interceptor.Data {
 
     public class Entity {
-        public static List<EntityUpdate> GetPositions(Packet p) {
+		uint networkOrder = 0;
+		internal ProtoBuf.Entity proto;
+		public ProtoBuf.Entity Data {
+			get { return proto; }
+			private set {
+				proto = value;
+				UID = proto.baseNetworkable.uid;
+				Position = proto.baseEntity.pos;
+				Rotation = Quaternion.Euler(proto.baseEntity.rot);
+			}
+		}
+		public bool IsPlayer { get { return proto.basePlayer != null; } }
+		public bool IsLocalPlayer { get { return proto.basePlayer.metabolism != null; } }
+
+		public UInt32 UID { get; private set; }
+		public Vector3 Position { get; private set; }
+		public Quaternion Rotation { get; private set; }
+
+		static Dictionary<UInt32, Entity> entities;
+		public static Entity GetLocalPlayer() {
+			return First(item => item.Value.IsLocalPlayer);
+		}
+
+		public static List<Entity> GetPlayers() {
+			return Find(item => { return item.Value.IsPlayer; });
+		}
+
+		public static bool Has(UInt32 uid) {
+			return entities.ContainsKey(uid);
+		}
+
+		public static Entity First(Func<KeyValuePair<UInt32, Entity>, bool> predicate) {
+			return entities.First(predicate).Value;
+		}
+
+		public static List<Entity> Find(Func<KeyValuePair<UInt32, Entity>, bool> predicate) {
+			var results = entities.Where(predicate);
+			return (from item in results select item.Value).ToList();
+		}
+
+		public static Entity Find(UInt32 uid) {
+			Entity ent;
+			if (entities.TryGetValue(uid, out ent)) {
+				return ent;
+			}
+			return null;
+		}
+
+		public static Entity CreateOrUpdate(UInt32 networkOrder, ProtoBuf.Entity entityInfo) {
+			uint uid = entityInfo.baseNetworkable.uid;
+			if (Has(uid)) {
+				entities[uid].networkOrder = networkOrder;
+				entities[uid].proto = entityInfo;
+				return entities[uid];
+			} else {
+				Entity entity = new Entity();
+				entity.networkOrder = networkOrder;
+				entity.proto = entityInfo;
+				entities.Add(uid, entity);
+				return entity;
+			}
+		}
+
+		public static void CreateOrUpdate(EntityDestroy destroyInfo) {
+			if (Has(destroyInfo.UID)) entities.Remove(destroyInfo.UID);
+		}
+
+		public static Entity UpdatePosistion(Data.Entity.EntityUpdate update) {
+			if (!Has(update.uid)) return null;
+			entities[update.uid].Position = update.position;
+			entities[update.uid].Rotation = Quaternion.Euler(update.rotation);
+			return entities[update.uid];
+		}
+
+		public static List<Entity> UpdatePositions(List<Data.Entity.EntityUpdate> updates) {
+			List<Entity> entities = new List<Entity>();
+			foreach (var update in updates) {
+				var entity = UpdatePosistion(update);
+				if(entity != null) entities.Add(entity);
+			}
+			return entities.Count > 0 ? entities : null;
+		}
+
+		public static List<EntityUpdate> ParsePositions(Packet p) {
             List<EntityUpdate> updates = new List<EntityUpdate>();
             /* EntityPosition packets may contain multiple positions */
             while (p.unread >= 28L /* Uint32 = 4bytes, Float = 4bytes. Uint32 + (Float * 6) = 28 */) {
@@ -19,7 +104,7 @@ namespace Rust_Interceptor.Data {
             return updates;
         }
 
-        public static uint GetEntity(Packet p, out ProtoBuf.Entity entity) {
+        public static uint ParseEntity(Packet p, out ProtoBuf.Entity entity) {
             /* Entity Number/Order */
             var num = p.UInt32();
             entity = ProtoBuf.Entity.Deserialize(p);

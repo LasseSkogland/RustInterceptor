@@ -1,15 +1,11 @@
-namespace Rust_Interceptor.Data
-{
-	public class EntityDestroy
-    {
-        internal static uint uid;
-		public uint UID { get{ return uid; } }
-		internal static byte destroyMode;
-		public byte DestroyMode { get{ return destroyMode; } }
+namespace Rust_Interceptor.Data {
+	public class EntityDestroy {
+		public uint UID { get; private set; }
+		public byte DestroyMode { get; private set; }
 
-		public static void Destroy(Packet p) {
-			uid = p.UInt32();
-            destroyMode = p.UInt8();
+		public EntityDestroy(Packet p) {
+			UID = p.UInt32();
+			DestroyMode = p.UInt8();
 		}
 	}
 }

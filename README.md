@@ -2,9 +2,8 @@
 ### Currently Implemented:
 - **Client - Server "Proxy"**
 - **Packet Serialization**(JSON formatted)
-- **Packet Parsers:**
- - **Entities** (Partial, this one's big)
- - **All other handlers are complete**
+- **Packet Parsers for packets that does not contain Protocol Buffers**
+- **Basic Entity Handler**
  
 ### Dependencies:
 - Steam\steamapps\common\Rust\RustClient_Data\Managed\Rust.Data.dll
@@ -22,81 +21,63 @@
 - Use only as directed.
 - Do not use while operating a motor vehicle or heavy equipment.
 
-## Usage
-Under construction...
-
 ### Examples
-**Dump Packets**
-``` csharp
-private static void Main(string[] args) {
-	RustInterceptor.FindDependencies();
-	RustInterceptor rusti;
-	Console.Write("Server IP: ");
-	string ip = Console.ReadLine();
-	int port = -1;
-	while (port == -1) {
-		Console.Write("Server Port: ");
-		try {
-			port = int.Parse(Console.ReadLine().Trim());
-		} catch (Exception) {
-			Console.WriteLine("Try again...");
-		}
-	}
-	rusti = new RustInterceptor(server: ip, port: port);
-	Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs eventArgs) => {
-		rusti.SavePackets("packets.json");
-	};
-	rusti.ClientPackets = true;
-	rusti.AddPacketToFilter(0);
-	rusti.Start();
-	while (rusti.IsAlive) {
-		System.Threading.Thread.Sleep(10);
-	}
-	Console.WriteLine("Shutting down...");
-	rusti.SavePackets("packets.json");
-}
-```
-**HandleEntities**
-``` csharp
-private static void Main(string[] args) {
-	RustInterceptor.FindDependencies();
-	RustInterceptor rusti;
-	Console.Write("Server IP: ");
-	string ip = Console.ReadLine();
-	int port = -1;
-	while (port == -1) {
-		Console.Write("Server Port: ");
-		try {
-			port = int.Parse(Console.ReadLine().Trim());
-		} catch (Exception) {
-			Console.WriteLine("Try again...");
-		}
-	}
-	rusti = new RustInterceptor(server: ip, port: port);
-	rusti.ClientPackets = false;
-	rusti.RememberPackets = false;
-	Packet packet;
-	Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs arg) => {
-		if (arg.Cancel) rusti.Stop();
-	};
-	rusti.Start();
-	while (rusti.IsAlive) {
-		rusti.GetPacket(out packet);
-		switch ((Packet.Rust)packet.packetID) {
-			case Packet.Rust.Entities:
-				Data.Entity.CreateOrUpdate(packet);
-				break;
-			case Packet.Rust.EntityPosition:
-				Data.Entity.UpdatePosition(packet);
-				break;
-		}
-	}
-	Console.WriteLine("Shutting down...");
-	Console.ReadKey();
-}
-```
+**Advanced Users: [Have a look at this](https://github.com/SharpUmbrella/RustInterceptor/blob/master/RustInterceptor/SimpleInterceptor.cs)**
 
-Bitcoin: 3BYt2fDDd1kQUAWVKR51o9fxcU4eggc8Xq
+**Example for Beginners(noobs)**
+``` csharp
+using System;
+using Rust_Interceptor;
+using Rust_Interceptor.Data;
+
+class Program : SimpleInterceptor {
+
+	public Program() : base() {
+		Interceptor.AddPacketsToFilter(Packet.Rust.ConsoleCommand, Packet.Rust.ConsoleMessage); // Filter packets, you will only receive the packets defined in this function, remove this line to receive all packets
+		Interceptor.ClientPackets = true; // Receive client packets, in this example you would receive both Server and Client Packets
+		Interceptor.CommandPrefix = "RI."; // Command Prefix for "sv" command, in this example you could send a command to this program with "sv RI.randomValue 24" and receive OnCommand("randomValue 24")
+		Interceptor.Start();
+	}
+
+	public override void OnCommand(string command) {
+		if (command.StartsWith("randomValue")) {
+			var str = command.Split(' ');
+			Console.WriteLine("{0} = {1}", str[0], int.Parse(str[1]));
+		}
+	}
+
+	public override void OnPacket(Packet packet) {
+		switch (packet.rustID) {
+			case Packet.Rust.ConsoleMessage:
+				ConsoleMessage message = new ConsoleMessage(packet);
+				Console.WriteLine("Console Message from Server: {0}", message.Message);
+				break;
+		}
+	}
+
+	public override void OnEntity(Entity entity) {
+		if (entity.IsPlayer)
+			if (entity.IsLocalPlayer) Console.WriteLine("OMG is it really you {0} :O", entity.Data.basePlayer.name);
+			else Console.WriteLine("Meh, you're not that special {0}", entity.Data.basePlayer.name);
+	}
+
+	public override void OnEntityDestroy(EntityDestroy destroyInfo) {
+		Console.WriteLine("Entity with UID({0}) got destroyed :'(", destroyInfo.UID);
+	}
+
+	private static void Main(string[] args) {
+		new Program();
+	}
+}
+
+```
+## For those fealing generous
+Do not donate if you feel you need to, donate if you want to :)
+
 Paypal.me: paypal.me/LasseSkogland
 
+Bitcoin: 3BYt2fDDd1kQUAWVKR51o9fxcU4eggc8Xq
+
+Bitcoin QR:
 ![Bitcoin QR](http://i.imgur.com/Q7S8buL.png)
+

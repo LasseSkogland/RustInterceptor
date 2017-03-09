@@ -1,9 +1,11 @@
 using Facepunch.Network.Raknet;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using SilentOrbit.ProtocolBuffers;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -15,6 +17,7 @@ namespace Rust_Interceptor {
 		public bool ClientPackets = false;
 		public bool RememberPackets = false;
 		public bool RememberFilteredOnly = false;
+		public string CommandPrefix = "RI.";
 
 		internal bool isAlive;
 		public bool IsAlive {
@@ -23,11 +26,11 @@ namespace Rust_Interceptor {
 			}
 		}
 
-        public int RememberedPacketCount {
-            get {
-                return remeberedPackets.Count;
-            }
-        }
+		public int RememberedPacketCount {
+			get {
+				return remeberedPackets.Count;
+			}
+		}
 
 		internal static Packet serverPacket;
 		internal static Packet clientPacket;
@@ -44,9 +47,10 @@ namespace Rust_Interceptor {
 		internal readonly Thread backgroundThread;
 
 		internal Action<Packet> packetHandlerCallback = null;
+		internal Action<string> commandCallback = null;
 
 		public RustInterceptor(string server = "127.0.0.1", int port = 28015, int listenPort = 5678) {
-            StringPool.Fill();
+			StringPool.Fill();
 			serverIP = server;
 			serverPort = port;
 			this.listenPort = listenPort;
@@ -71,13 +75,14 @@ namespace Rust_Interceptor {
 			get { return clientPacket.incomingGUID; }
 		}
 
-		public void AddPacketToFilter(params Packet.Rust[] packetTypes) {
+		public void AddPacketsToFilter(params Packet.Rust[] packetTypes) {
 			foreach (Packet.Rust type in packetTypes) {
-				packetFilter.Add(type);
+				if (!packetFilter.Contains(type))
+					packetFilter.Add(type);
 			}
 		}
 
-		public bool IsFiltered(Packet p) {
+		internal bool IsFiltered(Packet p) {
 			if (p.type != Packet.PacketType.RUST) return false;
 			if (packetFilter.Count == 0)
 				return true;
@@ -106,14 +111,14 @@ namespace Rust_Interceptor {
 
 		public void SavePackets(Packet[] packet, string filename = "packets.json", Formatting formatting = Formatting.Indented, bool informative = true) {
 			Serializer.informativeDump = informative;
-            JsonWriter jsonWriter = new JsonTextWriter(new StreamWriter(File.Create(filename)));
-            jsonWriter.Formatting = formatting;
-            jsonWriter.WriteStartArray();
-            foreach (Packet p in packet) {
-                Serializer.Serialize(jsonWriter, p);
-            }
-            jsonWriter.WriteEndArray();
-            jsonWriter.Close();
+			JsonWriter jsonWriter = new JsonTextWriter(new StreamWriter(File.Create(filename)));
+			jsonWriter.Formatting = formatting;
+			jsonWriter.WriteStartArray();
+			foreach (Packet p in packet) {
+				Serializer.Serialize(jsonWriter, p);
+			}
+			jsonWriter.WriteEndArray();
+			jsonWriter.Close();
 		}
 
 		public void SavePackets(List<Packet> packets, string filename = "packets.json", Formatting formatting = Formatting.Indented, bool informative = true) {
@@ -177,22 +182,35 @@ namespace Rust_Interceptor {
 								break;
 						}
 						if (!isAlive) break;
-					} else if (ClientPackets && !emptyPacket && IsFiltered(packet)) {
-						if (packetHandlerCallback != null) {
-							packetHandlerCallback(packet);
-						} else
-							lock (packetQueue) {
-								packetQueue.Enqueue(packet);
+					} else {
+						bool shouldDrop = false;
+						if (clientPacket.type == Packet.PacketType.RUST && commandCallback != null)
+							if (clientPacket.rustID == Packet.Rust.ConsoleCommand) {
+								string command = clientPacket.String();
+								if (command.StartsWith(CommandPrefix, StringComparison.OrdinalIgnoreCase)) {
+									commandCallback(command.Substring(CommandPrefix.Length));
+									shouldDrop = true;
+								}
 							}
-					}
-					clientPacket.Send(serverPeer, serverGUID);
-					clientPacket.Clear();
-					packet.delay = (DateTime.Now.Ticks - ticks);
-					if (RememberFilteredOnly && !IsFiltered(packet) && !ClientPackets) continue;
-					if (RememberPackets)
-						lock (remeberedPackets) {
-							remeberedPackets.Add(packet);
+						if (!shouldDrop) {
+							if (ClientPackets && !emptyPacket && IsFiltered(packet)) {
+								if (packetHandlerCallback != null) {
+									packetHandlerCallback(packet);
+								} else
+									lock (packetQueue) {
+										packetQueue.Enqueue(packet);
+									}
+							}
+							clientPacket.Send(serverPeer, serverGUID);
+							clientPacket.Clear();
+							packet.delay = (DateTime.Now.Ticks - ticks);
+							if (RememberFilteredOnly && !IsFiltered(packet) && !ClientPackets) continue;
+							if (RememberPackets)
+								lock (remeberedPackets) {
+									remeberedPackets.Add(packet);
+								}
 						}
+					}
 				}
 				if (hasServerPacket) {
 					var ticks = DateTime.Now.Ticks;
@@ -221,6 +239,17 @@ namespace Rust_Interceptor {
 				}
 
 			}
+		}
+
+		public static string GenerateProtoBufStructures() {
+			StringBuilder str = new StringBuilder();
+			Assembly rustData = Assembly.LoadFrom("Rust.Data.dll"); ;
+			var types = rustData.GetTypes().Where(item => item.GetInterfaces().Contains(typeof(IProto)));
+			foreach (var type in types) {
+				str.AppendLine(String.Format("{0}: ", type.Name));
+				str.AppendLine(ObjectDumper.Dump(Activator.CreateInstance(type)));
+			}
+			return str.ToString();
 		}
 	}
 }
