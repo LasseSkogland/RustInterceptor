@@ -57,9 +57,11 @@ namespace Rust_Interceptor.Data {
 		public static Entity CreateOrUpdate(UInt32 networkOrder, ProtoBuf.Entity entityInfo) {
 			uint uid = entityInfo.baseNetworkable.uid;
 			if (Has(uid)) {
-				entities[uid].networkOrder = networkOrder;
-				entities[uid].proto = entityInfo;
-				return entities[uid];
+				Entity entity = entities[uid];
+				entity.networkOrder = networkOrder;
+				entity.proto = entityInfo;
+				entities[uid] = entity;
+				return entity;
 			} else {
 				Entity entity = new Entity();
 				entity.networkOrder = networkOrder;
@@ -75,9 +77,11 @@ namespace Rust_Interceptor.Data {
 
 		public static Entity UpdatePosistion(Data.Entity.EntityUpdate update) {
 			if (!Has(update.uid)) return null;
-			entities[update.uid].Position = update.position;
-			entities[update.uid].Rotation = Quaternion.Euler(update.rotation);
-			return entities[update.uid];
+			Entity entity = entities[update.uid];
+			entity.Position = update.position;
+			entity.Rotation = Quaternion.Euler(update.rotation);
+			entities[update.uid] = entity;
+			return entity;
 		}
 
 		public static List<Entity> UpdatePositions(List<Data.Entity.EntityUpdate> updates) {
