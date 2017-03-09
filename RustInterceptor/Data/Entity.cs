@@ -24,7 +24,7 @@ namespace Rust_Interceptor.Data {
 		public Vector3 Position { get; private set; }
 		public Quaternion Rotation { get; private set; }
 
-		static Dictionary<UInt32, Entity> entities;
+		static Dictionary<UInt32, Entity> entities = new Dictionary<UInt32, Entity>();
 		public static Entity GetLocalPlayer() {
 			return First(item => item.Value.IsLocalPlayer);
 		}
