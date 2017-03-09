@@ -79,6 +79,7 @@
     <Compile Include="Data\GroupLeave.cs" />
     <Compile Include="Data\Message.cs" />
     <Compile Include="Data\RPCMessage.cs" />
+    <Compile Include="ProtoGen.cs" />
     <Compile Include="SimpleInterceptor.cs" />
     <Compile Include="ObjectDumper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

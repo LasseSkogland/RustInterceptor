@@ -240,16 +240,5 @@ namespace Rust_Interceptor {
 
 			}
 		}
-
-		public static string GenerateProtoBufStructures() {
-			StringBuilder str = new StringBuilder();
-			Assembly rustData = Assembly.LoadFrom("Rust.Data.dll"); ;
-			var types = rustData.GetTypes().Where(item => item.GetInterfaces().Contains(typeof(IProto)));
-			foreach (var type in types) {
-				str.AppendLine(String.Format("{0}: ", type.Name));
-				str.AppendLine(ObjectDumper.Dump(Activator.CreateInstance(type)));
-			}
-			return str.ToString();
-		}
 	}
 }
