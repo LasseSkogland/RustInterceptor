@@ -10,19 +10,14 @@ namespace Rust_Interceptor.Data {
 		internal ProtoBuf.Entity proto;
 		public ProtoBuf.Entity Data {
 			get { return proto; }
-			private set {
-				proto = value;
-				UID = proto.baseNetworkable.uid;
-				Position = proto.baseEntity.pos;
-				Rotation = proto.baseEntity.rot;
-			}
+			private set { proto = value; }
 		}
 		public bool IsPlayer { get { return proto.basePlayer != null; } }
 		public bool IsLocalPlayer { get { return proto.basePlayer.metabolism != null; } }
 
-		public UInt32 UID { get; private set; }
-		public Vector3 Position { get; private set; }
-		public Vector3 Rotation { get; private set; }
+		public UInt32 UID { get { return proto.baseNetworkable.uid; } }
+		public Vector3 Position { get { return proto.baseEntity.pos; } }
+		public Vector3 Rotation { get { return proto.baseEntity.rot; } }
 
 		static Dictionary<UInt32, Entity> entities = new Dictionary<uint, Entity>();
 		public static Entity GetLocalPlayer() {
