@@ -141,7 +141,11 @@ namespace Rust_Interceptor {
 		}
 
 		internal void BackgroundThread() {
-			Thread thread = new Thread(() => Clipboard.SetText(string.Format("connect 127.0.0.1:{0}", listenPort)));
+			Thread thread = new Thread(() => {
+                Clipboard.SetText(string.Format("connect 127.0.0.1:{0}", listenPort));
+                MessageBox.Show("Se ha copiado en tu portapeles el contenido : \n " + Clipboard.GetText());
+            });
+           
 			thread.SetApartmentState(ApartmentState.STA);
 			thread.Start();
 			thread.Join();
@@ -179,6 +183,7 @@ namespace Rust_Interceptor {
 							case Packet.RakNet.CONNECTION_LOST:
 								isAlive = false;
 								Console.WriteLine("Client Disconnected");
+                                
 								break;
 						}
 						if (!isAlive) break;

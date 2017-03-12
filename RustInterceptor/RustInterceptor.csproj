@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C0EF0E2D-E949-4169-947C-C2E690C1A9F4}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Rust_Interceptor</RootNamespace>
     <AssemblyName>RustInterceptor</AssemblyName>
@@ -44,15 +44,16 @@
   <PropertyGroup />
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Rust.Data, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Rust\RustClient_Data\Managed\Rust.Data.dll</HintPath>
+      <HintPath>..\..\..\Steam Juegos\steamapps\common\Rust\RustClient_Data\Managed\Rust.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -62,7 +63,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Rust\RustClient_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\Steam Juegos\steamapps\common\Rust\RustClient_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +80,15 @@
     <Compile Include="Data\GroupLeave.cs" />
     <Compile Include="Data\Message.cs" />
     <Compile Include="Data\RPCMessage.cs" />
+    <Compile Include="Forms\Hooks\WindowHook.cs" />
+    <Compile Include="Forms\Overlay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Overlay.Designer.cs">
+      <DependentUpon>Overlay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Structs\WindowStruct.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="ProtoGen.cs" />
     <Compile Include="SimpleInterceptor.cs" />
     <Compile Include="ObjectDumper.cs" />
@@ -98,6 +108,14 @@
     <Content Include="RakNet.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\Overlay.es.resx">
+      <DependentUpon>Overlay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Overlay.resx">
+      <DependentUpon>Overlay.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
