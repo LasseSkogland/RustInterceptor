@@ -33,18 +33,25 @@ namespace Rust_Interceptor.Data {
 		}
 
 		public static Entity First(Func<KeyValuePair<UInt32, Entity>, bool> predicate) {
-			return entities.First(predicate).Value;
+			lock (entities) {
+				return entities.First(predicate).Value;
+			}
 		}
 
 		public static List<Entity> Find(Func<KeyValuePair<UInt32, Entity>, bool> predicate) {
-			var results = entities.Where(predicate);
+			IEnumerable<KeyValuePair<UInt32, Entity>> results;
+			lock (entities) {
+				results = entities.Where(predicate);
+			}
 			return (from item in results select item.Value).ToList();
 		}
 
 		public static Entity Find(UInt32 uid) {
 			Entity ent;
-			if (entities.TryGetValue(uid, out ent)) {
-				return ent;
+			lock (entities) {
+				if (entities.TryGetValue(uid, out ent)) {
+					return ent;
+				}
 			}
 			return null;
 		}
@@ -52,30 +59,45 @@ namespace Rust_Interceptor.Data {
 		public static Entity CreateOrUpdate(UInt32 networkOrder, ProtoBuf.Entity entityInfo) {
 			uint uid = entityInfo.baseNetworkable.uid;
 			if (Has(uid)) {
-				Entity entity = entities[uid];
+				Entity entity;
+				lock (entities) {
+					entity = entities[uid];
+				}
 				entity.networkOrder = networkOrder;
 				entity.proto = entityInfo;
-				entities[uid] = entity;
+				lock (entities) {
+					entities[uid] = entity;
+				}
 				return entity;
 			} else {
 				Entity entity = new Entity();
 				entity.networkOrder = networkOrder;
 				entity.proto = entityInfo;
-				entities.Add(uid, entity);
+				lock (entities) {
+					entities.Add(uid, entity);
+				}
 				return entity;
 			}
 		}
 
 		public static void CreateOrUpdate(EntityDestroy destroyInfo) {
-			if (Has(destroyInfo.UID)) entities.Remove(destroyInfo.UID);
+			lock (entities) {
+				if (Has(destroyInfo.UID))
+					entities.Remove(destroyInfo.UID);
+			}
 		}
 
 		public static Entity UpdatePosistion(Data.Entity.EntityUpdate update) {
 			if (!Has(update.uid)) return null;
-			Entity entity = entities[update.uid];
+			Entity entity;
+			lock (entities) {
+				entity = entities[update.uid];
+			}
 			entity.Position = update.position;
 			entity.Rotation = update.rotation;
-			entities[update.uid] = entity;
+			lock (entities) {
+				entities[update.uid] = entity;
+			}
 			return entity;
 		}
 
