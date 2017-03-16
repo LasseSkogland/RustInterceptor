@@ -16,7 +16,8 @@ namespace Rust_Interceptor {
 
 		public static string GenerateProtoBufStructures() {
 			StringBuilder str = new StringBuilder();
-			Assembly rustData = Assembly.LoadFrom("Rust.Data.dll"); ;
+			Assembly rustData = Assembly.LoadFrom("Rust.Data.dll");
+			;
 			var types = rustData.GetTypes().Where(item => item.GetInterfaces().Contains(typeof(IProto)));
 			foreach (var type in types) {
 				str.AppendLine(String.Format("{0}: ", type.Name));
@@ -39,16 +40,21 @@ namespace Rust_Interceptor {
 					else if (typeof(IList).IsAssignableFrom(field.FieldType)) {
 						var itemType = field.FieldType.GetGenericArguments()[0];
 						object listItem = null;
-						if (itemType.IsEquivalentTo(typeof(ProtoBuf.PlayerNameID))) listItem = InstantiateType(typeof(ProtoBuf.PlayerNameID));
-						else if (itemType.IsEquivalentTo(typeof(ProtoBuf.RespawnInformation.SpawnOptions))) listItem = InstantiateType(typeof(ProtoBuf.RespawnInformation.SpawnOptions));
-						else if (itemType.IsEquivalentTo(typeof(ProtoBuf.ClientReady.ClientInfo))) listItem = InstantiateType(typeof(ProtoBuf.ClientReady.ClientInfo));
-						else listItem = Activator.CreateInstance(itemType);
+						if (itemType.IsEquivalentTo(typeof(ProtoBuf.PlayerNameID)))
+							listItem = InstantiateType(typeof(ProtoBuf.PlayerNameID));
+						else if (itemType.IsEquivalentTo(typeof(ProtoBuf.RespawnInformation.SpawnOptions)))
+							listItem = InstantiateType(typeof(ProtoBuf.RespawnInformation.SpawnOptions));
+						else if (itemType.IsEquivalentTo(typeof(ProtoBuf.ClientReady.ClientInfo)))
+							listItem = InstantiateType(typeof(ProtoBuf.ClientReady.ClientInfo));
+						else
+							listItem = Activator.CreateInstance(itemType);
 						var list = Activator.CreateInstance(field.FieldType);
 						field.FieldType.GetMethod("Add").Invoke(list, new[] { listItem });
 						field.SetValue(element, list);
 					} else if (typeof(IProto).IsAssignableFrom(field.FieldType)) {
 						field.SetValue(element, InstantiateType(field.FieldType));
-					} else field.SetValue(element, Activator.CreateInstance(field.FieldType));
+					} else
+						field.SetValue(element, Activator.CreateInstance(field.FieldType));
 				}
 				return element;
 			} catch (Exception ex) {
@@ -63,7 +69,8 @@ namespace Rust_Interceptor {
 			StringBuilder megaFile = new StringBuilder();
 			foreach (var type in types) {
 				String tmp = GenerateProtoBuf(type);
-				if (tmp == null) continue;
+				if (tmp == null)
+					continue;
 				megaFile.AppendLine(tmp);
 			}
 			File.WriteAllText("mega.proto", megaFile.ToString());
@@ -81,14 +88,17 @@ namespace Rust_Interceptor {
 			//List<String> imports = new List<String>();
 			//String header = "syntax = \"proto3\";" + Environment.NewLine;
 			//str.Append(header);
-			str.AppendLine(String.Format("message {0} {{", protoBufClass.Name));
+			var index = protoBufClass.FullName.LastIndexOf(".") + 1;
+			var name = protoBufClass.FullName.Substring(index).Replace("+", "_");
+			str.AppendLine(String.Format("message {0} {{", name));
 			/*Action<String> addImport = new Action<String>(import => {
 				String importStr = String.Format("import \"{0}.proto\";", import);
 				if (!imports.Contains(importStr, StringComparer.OrdinalIgnoreCase)) {
 					imports.Add(importStr);
 				}
 			}); //*/
-			if (!typeof(IProto).IsAssignableFrom(protoBufClass)) return null;
+			if (!typeof(IProto).IsAssignableFrom(protoBufClass))
+				return null;
 			var element = InstantiateType(protoBufClass);
 			MemoryStream stream = new MemoryStream();
 			try {
@@ -101,17 +111,22 @@ namespace Rust_Interceptor {
 			stream.Position = 0;
 			FieldInfo[] members = element.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 			foreach (var memberInfo in members) {
-				if (memberInfo == null) continue;
-				if (memberInfo.Name.Equals("ShouldPool")) continue;
+				if (memberInfo == null)
+					continue;
+				if (memberInfo.Name.Equals("ShouldPool"))
+					continue;
 				var type = memberInfo.FieldType;
 				var fieldName = memberInfo.FieldType.Name;
 				if (typeof(IProto).IsAssignableFrom(type)) {
-					//addImport(type.Name);
-					fieldName = type.Name;
+					index = type.FullName.LastIndexOf(".") + 1;
+					fieldName = type.FullName.Substring(index).Replace("+", "");
 				} else if (type.IsValueType || type == typeof(String) || type == typeof(Byte[]) || typeof(IList).IsAssignableFrom(type)) {
-					if (typeof(Boolean).IsEquivalentTo(type)) fieldName = "bool";
-					else if (typeof(Single).IsEquivalentTo(type)) fieldName = "float";
-					else if (typeof(Byte[]).IsEquivalentTo(type)) fieldName = "bytes";
+					if (typeof(Boolean).IsEquivalentTo(type))
+						fieldName = "bool";
+					else if (typeof(Single).IsEquivalentTo(type))
+						fieldName = "float";
+					else if (typeof(Byte[]).IsEquivalentTo(type))
+						fieldName = "bytes";
 					else if (typeof(Vector3).IsEquivalentTo(type)) {
 						fieldName = "Vector3Serialized";
 						//addImport("UnityEngine/Vector3Serialized");
@@ -120,15 +135,18 @@ namespace Rust_Interceptor {
 						//addImport("UnityEngine/RaySerialized");
 					} else if (typeof(IList).IsAssignableFrom(type)) {
 						var itemType = type.GetGenericArguments()[0];
-						var itemTypeName = itemType.Name;
+						index = itemType.FullName.LastIndexOf(".") + 1;
+						var itemTypeName = itemType.FullName.Substring(index).Replace("+", "_");
 						if (itemType.IsValueType) {
 							itemTypeName = itemTypeName.ToLower();
-							if (itemType == typeof(Single)) itemTypeName = "float";
+							if (itemType == typeof(Single))
+								itemTypeName = "float";
 						}/* else if (typeof(IProto).IsAssignableFrom(itemType)) {
 							addImport(itemTypeName);
 						}//*/
 						fieldName = "repeated " + itemTypeName;
-					} else if(type.IsValueType) fieldName = fieldName.ToLower();
+					} else if (type.IsValueType)
+						fieldName = fieldName.ToLower();
 				}
 				Key key = GetKeySkipData(stream);
 				str.AppendLine(String.Format("\t{0} {1} = {2};", fieldName, memberInfo.Name, key.Field));
